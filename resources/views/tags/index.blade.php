@@ -1,12 +1,6 @@
 @extends('layouts.landing')
 @section('title', 'Tags')
 @section('content')
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Tags') }}
-        </h2>
-    </x-slot>
 
 @if ($message = Session::get('success'))
 <div class="alert alert-success" role="alert">
@@ -20,7 +14,7 @@
                 <i class="bi bi-plus-circle"></i> Crear etiqueta
             </a>
         </div>
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered table-responsive">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -38,15 +32,19 @@
                     <td>{{ $tag->description }}</td>
                     <td>{{ $tag->color }}</td>
                     <td>
-                        <form action="{{route('tag.destroy' , $tag->id)}}" method="POST">
+                        <form class="d-flex" action="{{route('tag.destroy' , $tag->id)}}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <a href="{{ route('tag.edit', $tag->id) }}" class="btn btn-primary btn-sm">
-                                <i class="bi bi-pencil-square"></i> Edit
-                            </a>
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Do you want to delete this student?');">
-                                <i class="bi bi-trash"></i> Delete
-                            </button>
+                            <div>
+                                <a href="{{ route('tag.edit', $tag->id) }}" class="btn btn-primary btn-sm">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Do you want to delete this student?');">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>
+                            </div>
                         </form>
                     </td>
                 </tr>
@@ -55,6 +53,4 @@
         </table>
      {{$tags->links()}}
     </div>
-
-</x-app-layout>
 @endsection
