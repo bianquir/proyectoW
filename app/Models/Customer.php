@@ -14,4 +14,14 @@ class Customer extends Model
     {
         return $this->hasMany(Tag::class);
     }
+
+    protected $fillable = [
+        'id_message',
+        'tag_id',
+        'id_order',
+        'name',
+        'lastname',
+        'phone',
+        'email'
+    ];
 }
