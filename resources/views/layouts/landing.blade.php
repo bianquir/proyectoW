@@ -17,7 +17,7 @@
     </header>
     <main class="bg-secondary d-flex">
             <div class="col-1 bg-primary">
-                @yield('aside')
+                @include('layouts._partials.aside')
             </div>
             <div class="col-11 main-content bg-info">
                 @yield('content')
