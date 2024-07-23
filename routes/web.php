@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('tag', TagController::class);
     Route::resource('customer',CustomerController::class);
+
+
+    Route::get('/send-message', [MessageController::class, 'sendMessage']);
 });
 
 require __DIR__.'/auth.php';
