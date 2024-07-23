@@ -12,18 +12,18 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="container-fluid">
-    <header class="bg-dark text-white text-center">
+    <header class="bg-dark text-white text-center header-bg">
         <h1>Header</h1>
     </header>
     <main class="bg-secondary d-flex">
-            <div class="col-1 bg-primary">
+            <div class="col-0,5 bg-primary">
                 @include('layouts._partials.aside')
             </div>
-            <div class="col-11 main-content bg-info">
+            <div class="col-11,5 main-content content-bg">
                 @yield('content')
             </div>
     </main>
-    <footer class="bg-dark text-white text-center">
+    <footer class= "text-white text-center footer-bg">
         <h1>Footer</h1>
     </footer>
 </body>
