@@ -11,7 +11,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="container-fluid">
+<body>
     <header class="bg-dark text-white text-center header-bg">
         <h1>Header</h1>
     </header>
@@ -19,7 +19,7 @@
             <div class="col-0,5 bg-primary">
                 @include('layouts._partials.aside')
             </div>
-            <div class="col-11,5 main-content content-bg">
+            <div class="col-11,5 container-fluid content-bg">
                 @yield('content')
             </div>
     </main>
