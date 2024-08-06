@@ -10,18 +10,15 @@ class Customer extends Model
 {
     use HasFactory;
 
-    public function tags():HasMany
+    protected $fillable = ['dni', 'cuil', 'id_message', 'tag_id', 'order_id', 'name', 'lastname', 'phone', 'email'];
+
+    public function orders()
     {
-        return $this->hasMany(Tag::class);
+        return $this->hasMany(Order::class);
     }
 
-    protected $fillable = [
-        'id_message',
-        'tag_id',
-        'id_order',
-        'name',
-        'lastname',
-        'phone',
-        'email'
-    ];
+    public function tag()
+    {
+        return $this->belongsTo(Tag::class);
+    }
 }

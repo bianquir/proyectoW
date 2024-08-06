@@ -34,6 +34,10 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/send-message', [MessageController::class, 'sendMessage']);
+    Route::get('/clientes', function () {
+        return view('clientesDatos');
+    });
+    Route::get('/search', [CustomerController::class, 'search'])->name('customer.search');
 });
 
 require __DIR__.'/auth.php';
