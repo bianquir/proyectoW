@@ -13,10 +13,10 @@
         <div class="card">
             <div class="card-header">
                 <div class="float-start">
-                    Edit Tag
+                    Editar etiqueta
                 </div>
                 <div class="float-end">
-                    <a href="{{ route('tag.index') }}" class="btn btn-primary btn-sm">&larr; Back</a>
+                    <a href="{{ route('tag.index') }}" class="btn btn-primary btn-sm">&larr; Atrás</a>
                 </div>
             </div>
             <div class="card-body">
@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="mb-3 row">
-                        <label for="description" class="col-md-4 col-form-label text-md-end text-start">description</label>
+                        <label for="description" class="col-md-4 col-form-label text-md-end text-start">Descripción</label>
                         <div class="col-md-6">
                           <input type="text" class="form-control @error('description') is-invalid @enderror" id="description" name="description" value="{{ $tag->description }}">
                             @if ($errors->has('description'))
@@ -45,16 +45,16 @@
                     </div>
 
                     <div class="mb-3 row">
-                        <label for="color" class="col-md-4 col-form-label text-md-end text-start">color</label>
+                        <label for="color" class="col-md-4 col-form-label text-md-end text-start">Color</label>
                         <div class="col-md-6">
-                          <input type="text" class="form-control @error('color') is-invalid @enderror" id="color" name="color" value="{{ $tag->color}}">
+                          <input type="color" class="form-control @error('color') is-invalid @enderror" id="color" name="color" value="{{ $tag->color }}" style="width: 40px; height: 40px; padding: 0; border: none; border-radius: 0;">
                             @if ($errors->has('color'))
                                 <span class="text-danger">{{ $errors->first('color') }}</span>
                             @endif
                         </div>
                     </div>
                     <div class="mb-3 row">
-                        <input type="submit" class="col-md-3 offset-md-5 btn btn-primary" value="Update">
+                        <input type="submit" class="col-md-3 offset-md-5 btn btn-primary" value="Actualizar">
                     </div>
                 </form>
             </div>

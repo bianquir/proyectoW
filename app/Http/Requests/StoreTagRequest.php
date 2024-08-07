@@ -24,7 +24,7 @@ class StoreTagRequest extends FormRequest
         return [
             'name_tag'=> 'required|string|max:255',
             'description'=> 'required|string|max:255',
-            'color'=> 'required|string|max:255',
+            'color'=> 'required|string|size:7',
         ];
     }
 }
