@@ -2,16 +2,19 @@
 @section('title','Clientes - CRUD')
 @section('content')
 
-<div>
-    <a href="{{ ('customer/create') }}" class="btn btn-primary btn-sm">Crear cliente</a>
+<div class="d-flex justify-content-between align-items-center mb-1 text">
+    <h1 class="h3">Listado de clientes</h1>
+    <a href="{{ route('customer.create') }}" class="btn btn-primary btn-md">Crear cliente</a>
 </div>
+
 
 <div class="row justify-content-center mt-3">
     <div class="col-md-12">
 
         @if ($message = Session::get('success'))
-            <div class="alert alert-success" role="alert">
+            <div class="alert alert-success d-flex justify-content-between align-items-center mb-1" role="alert">
                 {{ $message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
 
