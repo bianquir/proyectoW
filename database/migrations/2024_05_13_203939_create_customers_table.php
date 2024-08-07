@@ -13,15 +13,18 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
+            $table->string('dni', 8)->unique(); 
+            $table->string('cuil')->unique();
             $table->integer('id_message')->nullable();
-            $table->unsignedBigInteger('tag_id');
-            $table->integer('id_order')->nullable();
+            $table->unsignedBigInteger('tag_id')->nullable();
+            $table->unsignedBigInteger('order_id')->nullable(); 
             $table->string('name');
             $table->string('lastname')->nullable();
-            $table->integer('phone');
-            $table->string('email')->nullable();
-            $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
+            $table->string('phone'); 
+            $table->string('email')->unique()->nullable();
             $table->timestamps();
+
+            $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
         });
     }
 

@@ -10,8 +10,8 @@ class Tag extends Model
 {
     use HasFactory;
     protected $fillable=['name_tag', 'description', 'color'];
-    public function customers(): BelongsTo
+    public function customers()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->hasMany(Customer::class);
     }
 }

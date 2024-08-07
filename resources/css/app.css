@@ -105,19 +105,7 @@ footer{
   display: block;
 }
 
-.dropdown-menu .dropdown-item:hover, .dropdown-menu .dropdown-item.active {
-  background-color: #435e88;
+.mensaje-vista-previa{
+  font-size: 12px;
+  color: rgb(184, 184, 184)
 }
-
-.show {
-  display: block !important;
-}
-
-.text{
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  padding: 15px 15px;
-  border-radius: 5px;
-  display: inline-block;
-}
-

@@ -18,8 +18,8 @@ class TagFactory extends Factory
     {
         return [
             'name_tag'=>fake()->name(),
-            'description'=>fake()->paragraph(),
-            'color'=>fake()->unique()->safeColorName(),
+            'description'=>fake()->text(50),
+            'color'=>fake()->unique()->hexColor(),
             'created_at'=>now(),
             'updated_at'=>now()
         ];
