@@ -73,7 +73,7 @@ footer{
 }
 
 .content-bg {
-  background-color: #343b3f; 
+  background-color: #f8f8f8; 
 }
  
 .icon-style {
@@ -120,10 +120,8 @@ footer{
 }
 
 .text{
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  color: rgb(0, 0, 0);
   padding: 15px 15px;
-  border-radius: 5px;
   display: inline-block;
 }
 

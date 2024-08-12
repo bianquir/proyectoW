@@ -45,6 +45,12 @@
       </ul>
     </li>
 
+    <li class="nav-item">
+      <a href="{{ route('customer.search') }}" class="nav-link py-3" aria-current="page" title="Buscar" data-bs-toggle="tooltip" data-bs-placement="right">
+        <i class="bi bi-search icon-style"></i>
+      </a>
+    </li>
+
   <div class="dropdown border-top mt-auto">
     <a href="#" class="d-flex align-items-center justify-content-center p-3 link-dark text-decoration-none dropdown-toggle" id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="false">
       <img src="https://github.com/mdo.png" alt="mdo" width="24" height="24" class="rounded-circle">

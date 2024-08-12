@@ -21,8 +21,8 @@
         <div class="card">
             <div class="card-body">
                 
-                <table class="table table-striped table-bordered">
-                    <thead class="text-center">
+                <table class="table table-hover table-responsive">
+                    <thead class="text-center table-light">
                       <tr>
                         <th scope="col">#</th>
                         <th scope="col">Id</th>
@@ -35,6 +35,7 @@
                         <th scope="col">Apellido</th> 
                         <th scope="col">Celular</th>
                         <th scope="col">Email</th>
+                        <th scope="col">Acciones</th>
                       </tr>
                     </thead>
                     <tbody class="text-center">
