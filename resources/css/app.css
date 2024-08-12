@@ -110,6 +110,7 @@ footer{
   color: rgb(184, 184, 184)
 }
 
+
 .dropdown-menu .dropdown-item:hover, .dropdown-menu .dropdown-item.active {
   background-color: #435e88;
 }
@@ -147,4 +148,13 @@ footer{
       max-width: 400px;
       width: 100%;
   }
+}
+.color-square {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  margin-right: 5px;
+  vertical-align: middle;
+
 }
