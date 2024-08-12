@@ -11,7 +11,7 @@
           <i class="bi bi-arrow-up-circle-fill icon-style"></i>
       </a>
       <ul class="dropdown-menu" id="cargarMenu1">
-          <li><a class="dropdown-item" href="#">Cliente</a></li>
+          <li><a class="dropdown-item" href="{{ route('customer.index') }}">Cliente</a></li>
           <li><a class="dropdown-item" href="#">Tareas</a></li>
       </ul>
     </li>
@@ -43,12 +43,6 @@
           <li><a class="dropdown-item" href="#">Exportar clientes</a></li>
           <li><a class="dropdown-item" href="#">Whatsapp</a></li>
       </ul>
-    </li>
-
-    <li class="nav-item">
-      <a href="{{ route('customer.index') }}" class="nav-link py-3" aria-current="page" title="Clientes" data-bs-toggle="tooltip" data-bs-placement="right">
-        <i class="bi bi-person-fill icon-style"></i>
-      </a>
     </li>
 
   <div class="dropdown border-top mt-auto">
