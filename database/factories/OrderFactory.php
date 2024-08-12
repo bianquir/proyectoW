@@ -18,10 +18,9 @@ class OrderFactory extends Factory
     {
         return [
             'customer_id'=>fake()->numberBetween('1', '10'),
-            'product_id'=>fake()->numberBetween('1', '10'),
              'date'=> fake()->date(),
-             'total'=> fake(),
-             'state' =>,
+             'total'=> fake()->numberBetween('100', '10000'),
+             'state' =>fake()->randomElement(['Entregado', 'En proceso', 'En espera']),
              'created_at'=>now(),
              'updated_at' =>now()
         ];
