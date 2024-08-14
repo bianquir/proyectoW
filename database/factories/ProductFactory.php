@@ -19,8 +19,8 @@ class ProductFactory extends Factory
         return [
             'name' => fake()->cityPrefix(),
             'description' => fake()->realText($maxNbChars = 20, $indexSize = 1),
-            'price',
-            'stock'
+            'price' => fake()->randomDigitNotNull(),
+            'stock' => fake()->randomDigitNotNull()
         ];
     }
 }

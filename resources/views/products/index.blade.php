@@ -17,9 +17,9 @@
 
             <a href="{{ route('products.create') }}" class="btn btn-primary btn-md mb-2">Crear producto</a>
 
-            <table class="table table-striped">
+            <table class="table table-hover table-responsive">
                 <thead>
-                    <tr class="text-center">
+                    <tr class="text-center table-light">
                         <th>ID</th>
                         <th>Nombre</th>
                         <th>Descripción</th>

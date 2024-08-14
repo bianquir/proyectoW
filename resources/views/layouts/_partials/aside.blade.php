@@ -1,7 +1,7 @@
 <div class="d-flex flex-column h-100 sidebar-bg">
   <ul class="nav nav-pills nav-flush flex-column mb-auto text-center flex-grow-1">
     <li class="nav-item">
-      <a href="#" class="nav-link active py-3" aria-current="page" title="Contacto" data-bs-toggle="tooltip" data-bs-placement="right">
+      <a href="{{ route('dashboard') }}" class="nav-link active py-3" aria-current="page" title="Contacto" data-bs-toggle="tooltip" data-bs-placement="right">
         <i class="bi bi-chat-fill icon-style"></i>
       </a>
     </li>
