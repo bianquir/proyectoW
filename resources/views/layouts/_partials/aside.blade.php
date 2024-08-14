@@ -51,11 +51,7 @@
         <i class="bi bi-gear-fill icon-style"></i>
       </a>
     </li>
-    <li>
-      <a href="#" class="nav-link link-dark py-3" title="Reportes" data-bs-toggle="tooltip" data-bs-placement="right">
-        <i class="bi bi-file-earmark-text-fill icon-style"></i>
-      </a>
-    </li>
+   
     <li>
       <a href="{{route('products.index')}}" class="nav-link link-dark py-3" title="Productos" data-bs-toggle="tooltip" data-bs-placement="right">
         <i class="bi bi-cart icon-style"></i>
