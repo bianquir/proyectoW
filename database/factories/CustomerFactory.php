@@ -18,7 +18,7 @@ class CustomerFactory extends Factory
     {
         return [
             'dni'=>fake()->numberBetween('1000000', '50000000'),
-            'Cuil'=>fake()->numerify('##-########-##'),
+            'cuil'=>fake()->numerify('##-########-##'),
             'id_message'=>fake()->numberBetween(),
             'tag_id'=>fake()->numberBetween('1', '10'),
             'order_id'=>fake()->numberBetween('1', '20'),

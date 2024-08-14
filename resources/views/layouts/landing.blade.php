@@ -20,7 +20,7 @@
                 @include('layouts._partials.aside')
             </div>
             <div class="col-11,5 container-fluid content-bg">
-                @yield('content')
+                    @yield('content')
             </div>
     </main>
     <footer class= "text-white text-center footer-bg">

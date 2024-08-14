@@ -46,4 +46,15 @@ document.addEventListener('DOMContentLoaded', function () {
             tooltipList.forEach(tooltip => tooltip.hide());
         });
     });
+
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const alert = document.getElementById('success-alert');
+    if (alert) {
+        setTimeout(function() {
+            alert.style.display = 'none';
+        }, 3000);
+    }
 });
