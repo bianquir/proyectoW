@@ -19,6 +19,26 @@
                     @method("PUT")
 
                     <div class="mb-3 row">
+                        <label for="dni" class="col-md-4 col-form-label text-md-end text-start">Dni</label>
+                        <div class="col-md-6">
+                          <input type="integer" class="form-control @error('dni') is-invalid @enderror" id="dni" name="dni" value="{{ $customer->dni }}">
+                            @if ($errors->has('dni'))
+                                <span class="text-danger">{{ $errors->first('dni') }}</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label for="cuil" class="col-md-4 col-form-label text-md-end text-start">Cuil</label>
+                        <div class="col-md-6">
+                          <input type="integer" class="form-control @error('cuil') is-invalid @enderror" id="cuil" name="cuil" value="{{ $customer->cuil }}">
+                            @if ($errors->has('cuil'))
+                                <span class="text-danger">{{ $errors->first('cuil') }}</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
                         <label for="name" class="col-md-4 col-form-label text-md-end text-start">Nombre</label>
                         <div class="col-md-6">
                           <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ $customer->name }}">

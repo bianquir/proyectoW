@@ -17,14 +17,14 @@ class CustomerFactory extends Factory
     public function definition(): array
     {
         return [
-            'dni'=>fake()->numberBetween('1000000', '50000000'),
-            'cuil'=>fake()->numerify('##-########-##'),
-            'id_message'=>fake()->numberBetween(),
+            'dni'=>fake()->unique()->numberBetween('30000000', '50000000'),
+            'cuil' => fake()->unique()->numberBetween('30000000000', '50000000'),
+            'id_message'=>fake()->numberBetween('1', '10000'),
             'tag_id'=>fake()->numberBetween('1', '10'),
             'order_id'=>fake()->numberBetween('1', '20'),
             'name'=>fake()->firstName(),
             'lastname'=>fake()->lastName(),
-            'phone'=>fake()->phoneNumber(),
+            'phone' => fake()->numberBetween(1000000000000, 9999999999999), 
             'email'=>fake()->email(),
         ];
     }

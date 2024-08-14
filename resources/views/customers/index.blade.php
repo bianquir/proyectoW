@@ -21,18 +21,21 @@
         <div class="card">
             <div class="card-body">
                 
-                <table class="table table-striped table-bordered">
-                    <thead class="text-center">
+                <table class="table table-hover table-responsive">
+                    <thead class="text-center table-light">
                       <tr>
                         <th scope="col">#</th>
                         <th scope="col">Id</th>
-                        <th scope="col">Id_mensaje</th>
+                        <th scope="col">Dni</th>
+                        <th scope="col">Cuil</th>
+                        <th scope="col">Id Mensaje</th>
                         <th scope="col">Id Tag</th>
-                        <th scope="col">Id orden</th>
+                        <th scope="col">Id Orden</th>
                         <th scope="col">Nombre</th>
-                        <th scope="col">apellido</th> 
+                        <th scope="col">Apellido</th> 
                         <th scope="col">Celular</th>
                         <th scope="col">Email</th>
+                        <th scope="col">Acciones</th>
                       </tr>
                     </thead>
                     <tbody class="text-center">
@@ -40,6 +43,8 @@
                         <tr>
                             <th scope="row">{{ $loop->iteration }}</th>
                             <td>{{ $customer->id }}</td>
+                            <td>{{ $customer->dni }}</td>
+                            <td>{{ $customer->cuil }}</td>
                             <td>{{ $customer->id_message }}</td>
                             <td>{{ $customer->tag_id }}</td>
                             <td>{{ $customer->id_order }}</td>

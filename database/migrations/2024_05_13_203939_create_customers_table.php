@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->string('dni', 8)->unique(); 
-            $table->integer('cuil')->unique();
+            $table->integer('dni')->unique(); 
+            $table->bigInteger('cuil')->unique();
             $table->integer('id_message')->nullable();
             $table->unsignedBigInteger('tag_id')->nullable();
             $table->unsignedBigInteger('order_id')->nullable(); 

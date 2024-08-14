@@ -65,6 +65,7 @@ class CustomerController extends Controller
     
         // Consulta básica para encontrar clientes por nombre, DNI o teléfono
         $customers = Customer::where('name', $query)
+            ->orWhere('id', $query)
             ->orWhere('dni', $query)
             ->orWhere('phone', $query)
             ->orWhere('cuil', $query)

@@ -22,6 +22,8 @@ class StoreCustomerRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'dni' => 'required|integer',
+            'cuil' => 'required|integer',
             'name' => 'required|string|max:250',
             'lastname' => 'string|max:250',
             'phone' => 'required|integer',
