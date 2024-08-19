@@ -11,4 +11,8 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        port: 8001, // Puerto que deseas usar para Vite
+        strictPort: true, // Lanza un error si el puerto está ocupado
+      },
 });

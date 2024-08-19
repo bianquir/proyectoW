@@ -90,7 +90,11 @@
                 </div>
             </div>
         </div>
-        <div class="col-4 h-100 bg-success d-flex justify-content-center align-items-center">Crear usuario</div>
+        <div class="col-4 h-100 bg-success d-flex justify-content-center align-items-center">
+            <div>
+                <a href="{{ route('message.sendPlaceholder', ['type' => 'confirmar_compra']) }}">Enviar Mensaje</a>
+            </div>
+        </div>
     </div>
     </div>
 @endsection

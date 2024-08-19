@@ -8,10 +8,36 @@ class MessageController extends Controller
 {
     public function sendMessage()
     {
+
+        $apiKey = config('services.whatsapp.api_key');
+
+
+        $par1= null;
+        $par2= null;
+        $par3= null;
+        $par4= null;
+
+        $message = [
+            'messaging_product' => "whatsapp",
+            "to" => "54344615581705",
+            "type" => "template",
+            "template" => [
+                            "name" => 'hello_world',
+                            "language" => [
+                                "code"=> "en_US"
+                                ]
+                            ]
+        ];
+
+
+        $messageJson = json_encode($message);
+
+        echo $messageJson;
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://graph.facebook.com/v18.0/371857952678909/messages',
+            CURLOPT_URL => 'https://graph.facebook.com/v20.0/371857952678909/messages',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -19,20 +45,10 @@ class MessageController extends Controller
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => '{
-    "messaging_product": "whatsapp",
-    "to": "54344615581705",
-    "type": "template",
-    "template": {
-        "name": "hello_world",
-        "language": {
-            "code": "en_US"
-        }
-    }
-}',
+            CURLOPT_POSTFIELDS => $messageJson,
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/json',
-                'Authorization: Bearer EAALmPyW95NUBO9Tbu0XNArw9WexRkUs7xUGvYBhWXlYRRFaeVbaVdL8kOpvBfoVVxsijJ4Qm0rUosBU46auDoe5XZBLJMbwFFRYuE5IS1LCUB86S4jWc53edczHoa1p8aJd44sWe4U7quJbLPkMnoQNZB49QJL7RfEp8iZCT736gZCP3vNRli11XYhbJamUZAdKtkfFZCrtstL0690QGsxvlkuTZCcZD'
+                'Authorization: Bearer ' . $apiKey
             ),
         ));
 
@@ -42,3 +58,18 @@ class MessageController extends Controller
         echo $response;
     }
 }
+
+
+
+
+// '{
+//     "messaging_product": "whatsapp",
+//     "to": "54344615581705",
+//     "type": "template",
+//     "template": {
+//         "name": "hello_world",
+//         "language": {
+//             "code": "en_US"
+//         }
+//     }
+// }'

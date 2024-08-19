@@ -84,7 +84,7 @@ class CustomerController extends Controller
         return view('clientesDatos', ['customers' => $customers]);
     }
     
-    
+
 }
 
 

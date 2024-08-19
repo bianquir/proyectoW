@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\WebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,11 +35,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('customer',CustomerController::class);
     Route::resource('products',ProductController::class);
 
-    Route::get('/send-message', [MessageController::class, 'sendMessage']);
+    Route::get('/send-message/{type}', [MessageController::class, 'sendMessage'])->name('message.sendPlaceholder');
     Route::get('/clientes', function () {
         return view('clientesDatos');
     });
     Route::get('/search', [CustomerController::class, 'search'])->name('customer.search');
 });
+Route::get('/webhook', [WebhookController::class, 'verifyWebhook']);
 
 require __DIR__.'/auth.php';
