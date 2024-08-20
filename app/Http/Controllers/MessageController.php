@@ -12,11 +12,6 @@ class MessageController extends Controller
         $apiKey = config('services.whatsapp.api_key');
 
 
-        $par1= null;
-        $par2= null;
-        $par3= null;
-        $par4= null;
-
         $message = [
             'messaging_product' => "whatsapp",
             "to" => "54344615581705",
@@ -61,15 +56,15 @@ class MessageController extends Controller
 
 
 
-
-// '{
-//     "messaging_product": "whatsapp",
-//     "to": "54344615581705",
-//     "type": "template",
-//     "template": {
-//         "name": "hello_world",
-//         "language": {
-//             "code": "en_US"
-//         }
-//     }
-// }'
+$token = env('WHATSAPP_API_TOKEN');
+$message = [
+    'messaging_product' => "whatsapp",
+    "to" => "54344615581705",
+    "type" => "template",
+    "template" => [
+                    "name" => 'hello_world',
+                    "language" => [
+                        "code"=> "en_US"
+                        ]
+                    ]
+];

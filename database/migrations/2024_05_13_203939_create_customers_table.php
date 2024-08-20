@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('dni')->unique(); 
             $table->bigInteger('cuil')->unique();
-            $table->integer('id_message')->nullable();
+            $table->integer('message_id')->nullable();
             $table->unsignedBigInteger('tag_id')->nullable();
             $table->unsignedBigInteger('order_id')->nullable(); 
             $table->string('name');

@@ -42,5 +42,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/search', [CustomerController::class, 'search'])->name('customer.search');
 });
 Route::get('/webhook', [WebhookController::class, 'verifyWebhook']);
+Route::post('/webhook', [WebhookController::class, 'processWebhook']);
 
 require __DIR__.'/auth.php';
