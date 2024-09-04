@@ -72,6 +72,17 @@
                     </div>
 
                     <div class="mb-3 row">
+                        <label for="address" class="col-md-4 col-form-label text-md-end text-start">Direccion</label>
+                        <div class="col-md-6">
+                          <input type="text" class="form-control @error('address') is-invalid @enderror" id="address" name="address" value="{{ old('address') }}">
+                            @if ($errors->has('address'))
+                                <span class="text-danger">{{ $errors->first('address') }}</span>
+                            @endif
+                        </div>
+                    </div>
+
+
+                    {{-- <div class="mb-3 row">
                         <label for="tag_id" class="col-md-4 col-form-label text-md-end  text-start">Elija el tag para el cliente</label>
                         <div class="col-md-6">
                             <select id="tag_id" name="tag_id" class="text-black form-control @error('tag_id') is-invalid @enderror" value="{{ old('tag_id') }}">
@@ -84,7 +95,7 @@
                                 <span class="text-danger">{{ $errors->first('tag_id') }}</span>
                             @endif
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="mb-3 row">
                         <input type="submit" class="col-md-3 offset-md-5 btn btn-primary" value="Agregar cliente">

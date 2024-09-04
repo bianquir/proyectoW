@@ -25,7 +25,6 @@ class StoreProductRequest extends FormRequest
             'name' => 'required|string|max:250',
             'description' => 'string|max:250',
             'price' => 'required|numeric',
-            'stock' => 'numeric'
         ];
     }
 
@@ -36,7 +35,6 @@ class StoreProductRequest extends FormRequest
             'name' => 'El nombre es obligatorio',
             'description' => 'La descripción solo debe contener letras o simbolos',
             'price' => 'El precio es obligatorio',
-            'stock' => 'El stock debe ser un valor numérico',
         ];
     }
 

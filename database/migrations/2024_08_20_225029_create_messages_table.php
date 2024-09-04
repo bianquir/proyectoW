@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained()->onDelete('cascade');
-            $table->string('phone_number');
+            $table->unsignedBigInteger('customer_id');
             $table->text('message');
-            $table->string('message_type');
+            $table->enum('message_type', ['text', 'image', 'video', 'document', 'audio', 'sticker', 'location', 'contact']);
             $table->enum('direction', ['incoming', 'outgoing']);
-            $table->string('status')->default('sent');
+            $table->enum('status', ['sent', 'delivered', 'read', 'failed', 'pending'])->default('sent');
             $table->string('response_id')->nullable();
             $table->timestamps();
         });

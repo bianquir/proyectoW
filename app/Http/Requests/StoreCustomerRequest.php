@@ -26,8 +26,9 @@ class StoreCustomerRequest extends FormRequest
             'cuil' => 'required|integer',
             'name' => 'required|string|max:250',
             'lastname' => 'string|max:250',
-            'phone' => 'required|integer',
+            'phone_number' => 'required|integer',
             'email' => 'email',
+            'address' => 'string|max:50',
             'tag_id' => 'required|integer|exists:tags,id'
         ];
     }

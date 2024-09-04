@@ -11,11 +11,8 @@ class Product extends Model
 
     protected $fillable = ['name', 'description', 'price', 'stock'];
 
-    public function orders()
+    public function orderDetails()
     {
-        return $this->belongsToMany(Order::class, 'order_products')
-                    ->withPivot('quantity')
-                    ->withTimestamps();
-        // Relación muchos a muchos con columna adicional `quantity`
+        return $this->hasMany(OrderDetail::class);
     }
 }

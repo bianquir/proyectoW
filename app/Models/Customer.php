@@ -10,16 +10,16 @@ class Customer extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['dni', 'cuil', 'id_message', 'tag_id', 'order_id', 'name', 'lastname', 'phone', 'email'];
+    protected $fillable = ['dni', 'cuil', 'name', 'lastname', 'phone_number', 'email','address'];
 
     public function orders()
     {
         return $this->hasMany(Order::class);
     }
 
-    public function tag()
+    public function tags()
     {
-        return $this->belongsTo(Tag::class);
+        return $this->belongsToMany(Tag::class, 'assigned_tags');
     }
 
     public function messages()

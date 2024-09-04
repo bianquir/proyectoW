@@ -24,8 +24,7 @@ class UpdateProductRequest extends FormRequest
         return [
             'name' => 'required|string|max:250',
             'description' => 'string|max:250',
-            'price' => 'required|numeric',
-            'stock' => 'numeric'
+            'price' => 'required|numeric'
         ];
     }
 
@@ -34,8 +33,7 @@ class UpdateProductRequest extends FormRequest
         return [
             'name' => 'El nombre es obligatorio',
             'description' => 'La descripción solo debe contener letras o simbolos',
-            'price' => 'El precio es obligatorio',
-            'stock' => 'El stock debe ser un valor numérico',
+            'price' => 'El precio es obligatorio'
         ];
     }
 }

@@ -43,5 +43,6 @@ Route::middleware('auth')->group(function () {
 });
 Route::get('/webhook', [WebhookController::class, 'verifyWebhook']);
 Route::post('/webhook', [WebhookController::class, 'processWebhook']);
+Route::get('/crearMensaje', [WebhookController::class, 'crearmensaje']);
 
 require __DIR__.'/auth.php';

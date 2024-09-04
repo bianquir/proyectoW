@@ -28,7 +28,7 @@ class UpdateCustomerRequest extends FormRequest
             'lastname' => 'string|max:250',
             'phone' => 'required|string',
             'email' => 'string|email',
-            'tag_id' => 'integer|exists:tags,id'
+            'address' => 'string|max:50'
         ];
     }
 }
