@@ -17,9 +17,10 @@ return new class extends Migration
             $table->string('cuil');
             $table->string('name');
             $table->string('lastname')->nullable();
-            $table->string('phone_number', 20)->index();  
+            $table->string('wa_id', 20)->index();
             $table->string('email')->unique()->nullable();
             $table->string('address')->nulleable();
+            $table->boolean('whatsapp_opt_in')->default(true);
             $table->timestamps();
         });
     }

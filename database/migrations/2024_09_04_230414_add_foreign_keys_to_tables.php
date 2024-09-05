@@ -17,6 +17,7 @@ return new class extends Migration
         
         Schema::table('messages', function (Blueprint $table) {
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+            $table->foreign('response_id')->references('id')->on('messages')->onDelete('set null');
         });
 
         Schema::table('assigned_tags', function (Blueprint $table) {
@@ -37,8 +38,29 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('tables', function (Blueprint $table) {
-            //
+        Schema::table('order_details', function (Blueprint $table) {
+            $table->dropForeign(['order_id']);
+            $table->dropForeign(['product_id']);
         });
+        
+        Schema::table('messages', function (Blueprint $table) {
+            $table->dropForeign(['customer_id']);
+            $table->dropForeign(['response_id']);
+        });
+        
+        Schema::table('assigned_tags', function (Blueprint $table) {
+            $table->dropForeign(['customer_id']);
+            $table->dropForeign(['tag_id']);
+        });
+        
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropForeign(['customer_id']);
+        });
+        
+        // Ahora se pueden eliminar las tablas principales y dependientes
+        Schema::dropIfExists('order_details');
+        Schema::dropIfExists('orders');
+        Schema::dropIfExists('messages');
+        Schema::dropIfExists('assigned_tags');
     }
 };

@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('customer_id');
             $table->text('message');
-            $table->enum('message_type', ['text', 'image', 'video', 'document', 'audio', 'sticker', 'location', 'contact']);
+            $table->enum('message_type', ['text', 'image', 'video', 'document', 'audio', 'sticker', 'location', 'contact', 'poll', 'button', 'template']);
             $table->enum('direction', ['incoming', 'outgoing']);
-            $table->enum('status', ['sent', 'delivered', 'read', 'failed', 'pending'])->default('sent');
-            $table->string('response_id')->nullable();
+            $table->enum('status', ['sent', 'delivered', 'read', 'failed', 'pending', 'received'])->default('sent');
+            $table->unsignedBigInteger('response_id')->nullable(); 
+            $table->string('media_url')->nullable();
+            $table->string('caption')->nullable();
+            $table->timestamp('timestamp')->nulleable();
             $table->timestamps();
         });
     }

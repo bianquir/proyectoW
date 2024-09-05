@@ -44,16 +44,35 @@ class WebhookController extends Controller
         
     }
 
-    public function processWebhook(Request $request)
+    public function receiveMessage(Request $request)
     {
         try
         {
-            $bodyContent = json_decode($request->getContent(),true);
-
+            $bodyContent = $request->json()->all();
+            $body='';
+            $name='';
             Log::info('Solicitud entrante de whatsapp: ',['bodyContent' => $bodyContent]);
 
-            $body = '';
-            $name='';
+
+            if(isset($bodyContent['value']['messages'][0]) && isset($bodyContent['value']['contacts'][0]))
+            {
+                $messageData = $bodyContent['value']['messages'][0];
+                $contactData = $bodyContent['value']['contacts'][0];
+
+                $message_id = $messageData['id'];
+                $message_wa_id = $contactData['wa_id'];
+                $sender_name = $contactData['profile']['name'] ?? null;
+                $message_body = $messageData['text']['body'] ?? '';
+                $message_type = $messageData['type'];
+                $timestamp = isset($messageData['timestamp']) ? date('Y-m-d H:i:s', $messageData['timestamp']) : null;
+
+                
+
+
+
+            }
+
+            
 
             $value = $bodyContent['entry'][0]['changes'][0]['value'] ?? null;
 
@@ -65,8 +84,17 @@ class WebhookController extends Controller
 
                     Log::info('Mensaje recibido:', ['name' => $name, 'body' => $body]);
                 }
-
             }
+
+
+///////////////////////Crear mensaje /////////////
+///////////////////////////////////////////////
+
+
+
+
+
+
             return response()->json([
                 'success' => true,
                 'data' =>  $body,
@@ -102,8 +130,6 @@ class WebhookController extends Controller
 
         $customer = new Customer();
 
-        $customer->dni = $dni;
-        $customer->cuil = $cuil;
         $customer->name = $name;
         $customer->phone_number = $phone;
         $customer->save();
