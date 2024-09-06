@@ -65,4 +65,42 @@ private function createMessage($template, $params = [])
     return $template;
 }
 
+
+
+///////////////// MANEJO DE MENSAJE VERSION 2 //////////////////////////////
+
+
+public function sendMessageV2(Request $request)
+{
+    // Extraer los datos del JSON recibido
+    $data = $request->json()->all();
+
+    $phoneNumberId = env('WHATSAPP_PHONE_NUMBER_ID');
+    $accessToken = env('WHATSAPP_ACCESS_TOKEN');
+    $apiUrl = env('WHATSAPP_API_URL') . $phoneNumberId . '/messages';
+
+    $recipient = $data['value']['contacts'][0]['wa_id'];
+    $messageBody = $data['value']['messages'][0]['text']['body'];
+
+    // Crear el payload para la API de WhatsApp
+    $payload = [
+        'messaging_product' => 'whatsapp',
+        'to' => $recipient,
+        'type' => 'text',
+        'text' => [
+            'body' => $messageBody,
+        ],
+    ];
+
+    // Enviar la solicitud a la API de WhatsApp
+    $response = Http::withToken($accessToken)->post($apiUrl, $payload);
+
+    if ($response->successful()) {
+        return response()->json(['status' => 'Message sent successfully']);
+    } else {
+        return response()->json(['status' => 'Failed to send message', 'error' => $response->body()]);
+    }
+}
+
+
 }
