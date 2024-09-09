@@ -84,6 +84,11 @@ return [
 
     'locale' => 'en',
 
+    'json' => [
+        'encode_options' => JSON_PRETTY_PRINT,
+        'depth' => 512,
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale

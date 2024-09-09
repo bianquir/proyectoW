@@ -19,9 +19,10 @@ return new class extends Migration
             $table->enum('direction', ['incoming', 'outgoing']);
             $table->enum('status', ['sent', 'delivered', 'read', 'failed', 'pending', 'received'])->default('sent');
             $table->unsignedBigInteger('response_id')->nullable(); 
+            $table->string('whatsapp_message_id')->nullable();
             $table->string('media_url')->nullable();
             $table->string('caption')->nullable();
-            $table->timestamp('timestamp')->nulleable();
+            $table->timestamp('timestamp')->nullable();
             $table->timestamps();
         });
     }

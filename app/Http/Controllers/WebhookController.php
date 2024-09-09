@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use Exception;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class WebhookController extends Controller
@@ -13,7 +14,8 @@ class WebhookController extends Controller
     
     private $verifyToken = 'ProyectoW2024-';
 
-
+ 
+    
     public function verifyWebhook(Request $request)
     {
         try
@@ -49,58 +51,57 @@ class WebhookController extends Controller
         try
         {
             $bodyContent = $request->json()->all();
-            $body='';
-            $name='';
-            Log::info('Solicitud entrante de whatsapp: ',['bodyContent' => $bodyContent]);
-
-
-            if(isset($bodyContent['value']['messages'][0]) && isset($bodyContent['value']['contacts'][0]))
+            Log::info($bodyContent);
+    
+            if(isset($bodyContent['entry'][0]['changes'][0]['value']['messages'][0]) && isset($bodyContent['entry'][0]['changes'][0]['value']['contacts'][0]))
             {
-                $messageData = $bodyContent['value']['messages'][0];
-                $contactData = $bodyContent['value']['contacts'][0];
-
-                $message_id = $messageData['id'];
+    
+                $messageData = $bodyContent['entry'][0]['changes'][0]['value']['messages'][0];
+                $contactData = $bodyContent['entry'][0]['changes'][0]['value']['contacts'][0];
+    
                 $message_wa_id = $contactData['wa_id'];
-                $sender_name = $contactData['profile']['name'] ?? null;
+                $sender_name = $contactData['profile']['name'] ?? '';
+    
+                $customer = Customer::where('wa_id', $message_wa_id)->first();
+    
+                if (!$customer)
+                {
+                    Log::info('Creating new customer...');
+                    $customer = Customer::Create([
+                        'name' => $sender_name,
+                        'wa_id' => $message_wa_id
+                    ]);
+                }
+    
+                $message_id = $messageData['id'];
                 $message_body = $messageData['text']['body'] ?? '';
                 $message_type = $messageData['type'];
-                $timestamp = isset($messageData['timestamp']) ? date('Y-m-d H:i:s', $messageData['timestamp']) : null;
-
-                
-
-
-
+                $message_direction = 'incoming';
+                $message_status = 'received';
+                $timestamp = Carbon::createFromTimestamp($messageData['timestamp']);
+    
+                Message::Create([
+                    'customer_id' => $customer->id,
+                    'message' => $message_body,
+                    'message_type' => $message_type,
+                    'direction' => $message_direction,
+                    'status' => $message_status,
+                    'whatsapp_message_id' => $message_id,
+                    'timestamp' => $timestamp,
+                ]);
+        
+                return response()->json([
+                    'success' => true,
+                ], 200);  
             }
-
+            else
+            {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Estructura de datos incorrecta.',
+                ], 400);
+            }
             
-
-            $value = $bodyContent['entry'][0]['changes'][0]['value'] ?? null;
-
-
-            if ($value && !empty($value['messages'])) {
-                if ($value['messages'][0]['type'] == 'text'){
-                    $body = $value['messages'][0]['text']['body'];
-                    $name = $value['contacts'][0]['profile']['name'];
-
-                    Log::info('Mensaje recibido:', ['name' => $name, 'body' => $body]);
-                }
-            }
-
-
-///////////////////////Crear mensaje /////////////
-///////////////////////////////////////////////
-
-
-
-
-
-
-            return response()->json([
-                'success' => true,
-                'data' =>  $body,
-                'name' => $name,
-            ], 200);  
-
         }
         catch (Exception $e)
         {
@@ -108,43 +109,12 @@ class WebhookController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
-
+    
             return response()->json([
                 'success' => false,
                 'error' => $e->getMessage(),
             ], 500);
         }
-        
     }
-
-
-    public function crearmensaje(){
-
-        $dni = 39255959;
-        $cuil = 20392559591;
-        $name = 'Franco';
-        $phone = 5493446581705;
-        $messageApi = 'Hola buenas noches';
-        $messagetype = 'text';
-
-
-        $customer = new Customer();
-
-        $customer->name = $name;
-        $customer->phone_number = $phone;
-        $customer->save();
-
-        $message = $customer->messages()->create([
-            'message' => $messageApi,
-            'message_type' => $messagetype
-        ]);
-
-        $customer->message_id = $message->id;
-        $customer->save();
-
-    }
-
-
-
-
+    
 }

@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->string('dni')->index();
-            $table->string('cuil');
+            $table->string('dni')->nullable()->index();
+            $table->string('cuil')->nullable();
             $table->string('name');
             $table->string('lastname')->nullable();
             $table->string('wa_id', 20)->index();
             $table->string('email')->unique()->nullable();
-            $table->string('address')->nulleable();
+            $table->string('address')->nullable();
             $table->boolean('whatsapp_opt_in')->default(true);
             $table->timestamps();
         });
