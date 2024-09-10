@@ -52,36 +52,45 @@ class WebhookController extends Controller
         {
             $bodyContent = $request->json()->all();
             Log::info($bodyContent);
-    
+
             if(isset($bodyContent['entry'][0]['changes'][0]['value']['messages'][0]) && isset($bodyContent['entry'][0]['changes'][0]['value']['contacts'][0]))
             {
-    
+
                 $messageData = $bodyContent['entry'][0]['changes'][0]['value']['messages'][0];
                 $contactData = $bodyContent['entry'][0]['changes'][0]['value']['contacts'][0];
-    
+
                 $message_wa_id = $contactData['wa_id'];
                 $sender_name = $contactData['profile']['name'] ?? '';
-    
+
                 $customer = Customer::where('wa_id', $message_wa_id)->first();
-    
+
                 if (!$customer)
                 {
                     Log::info('Creating new customer...');
-                    $customer = Customer::Create([
+                    $customer = Customer::create([
                         'name' => $sender_name,
                         'wa_id' => $message_wa_id
                     ]);
+
+                    if (!$customer) {
+                        throw new Exception('Failed to create customer');
+                    }
                 }
-    
+
+                Log::info($customer->id);
+
                 $message_id = $messageData['id'];
                 $message_body = $messageData['text']['body'] ?? '';
                 $message_type = $messageData['type'];
                 $message_direction = 'incoming';
                 $message_status = 'received';
                 $timestamp = Carbon::createFromTimestamp($messageData['timestamp']);
-    
-                Message::Create([
-                    'customer_id' => $customer->id,
+
+                $idCustomer = $customer->id;
+
+                // Crear el mensaje solo si se creó el cliente
+                Message::create([
+                    'customer_id' => $idCustomer,
                     'message' => $message_body,
                     'message_type' => $message_type,
                     'direction' => $message_direction,
@@ -89,11 +98,11 @@ class WebhookController extends Controller
                     'whatsapp_message_id' => $message_id,
                     'timestamp' => $timestamp,
                 ]);
-        
+
                 return response()->json([
                     'success' => true,
                 ], 200);  
-            }
+            }   
             else
             {
                 return response()->json([
@@ -101,7 +110,7 @@ class WebhookController extends Controller
                     'message' => 'Estructura de datos incorrecta.',
                 ], 400);
             }
-            
+
         }
         catch (Exception $e)
         {
@@ -109,12 +118,13 @@ class WebhookController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
-    
+
             return response()->json([
                 'success' => false,
                 'error' => $e->getMessage(),
             ], 500);
         }
     }
+
     
 }
