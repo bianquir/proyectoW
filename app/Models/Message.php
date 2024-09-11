@@ -17,8 +17,6 @@ class Message extends Model
         'message_type',
         'direction',
         'status',
-        'media_url',
-        'caption',
         'latitude',
         'longitude',
         'document_name',
@@ -47,5 +45,10 @@ class Message extends Model
     public function replies()
     {
         return $this->hasMany(Message::class, 'response_id');
+    }
+
+    public function mediaFiles()
+    {
+        return $this->hasMany(MediaFile::class, 'message_id');
     }
 }

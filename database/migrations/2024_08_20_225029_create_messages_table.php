@@ -21,11 +21,6 @@ return new class extends Migration
             $table->enum('direction', ['incoming', 'outgoing']);
             $table->enum('status', ['sent', 'delivered', 'read', 'failed', 'pending', 'received'])->default('sent');
 
-
-            //Multimedia
-            $table->string('media_url')->nullable();
-            $table->string('caption')->nullable();
-
             //Ubicacion
             $table->decimal('latitude',10,7)->nullable();
             $table->decimal('longitude',10,7)->nullable();

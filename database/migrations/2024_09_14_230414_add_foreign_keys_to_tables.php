@@ -29,7 +29,10 @@ return new class extends Migration
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');    
         });
-        
+
+        Schema::table('media_files', function (Blueprint $table) {
+            $table->foreign('message_id')->references('id')->on('messages')->onDelete('cascade'); // Si se elimina un mensaje, se eliminan sus archivos multimedia
+        });
         
     }
 
@@ -56,11 +59,16 @@ return new class extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->dropForeign(['customer_id']);
         });
+
+        Schema::table('media_files', function (Blueprint $table) {
+            $table->dropForeign(['message_id']);
+        });
         
         // Ahora se pueden eliminar las tablas principales y dependientes
         Schema::dropIfExists('order_details');
         Schema::dropIfExists('orders');
         Schema::dropIfExists('messages');
         Schema::dropIfExists('assigned_tags');
+        Schema::dropIfExists('media_files');
     }
 };
