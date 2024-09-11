@@ -77,18 +77,75 @@ class WebhookController extends Controller
                     }
                 }
 
-                Log::info($customer->id);
 
+                //Variables Comunes
                 $message_id = $messageData['id'];
-                $message_body = $messageData['text']['body'] ?? '';
                 $message_type = $messageData['type'];
                 $message_direction = 'incoming';
                 $message_status = 'received';
                 $timestamp = Carbon::createFromTimestamp($messageData['timestamp']);
-
                 $idCustomer = $customer->id;
+                //Variables segun type
+                $message_body = null;
+                $media_url = null;
+                $caption = null;
+                $latitude= null;
+                $longitude= null;
+                $reaction_emoji= null;
+                $reaction_message_id= null;
+                $contact_name = null;
+                $contact_phone_numbers = null;
+                $contact_emails = null;
+                $document_name = null;
 
-                // Crear el mensaje solo si se creó el cliente
+                switch ($message_type) {
+                    case 'text':
+                        $message_body = $messageData['text']['body'];
+                        break;
+                    case 'image':
+                        $media_url = $messageData['image']['link'];
+                        $caption = $messageData['image']['caption'] ?? null;
+                        break;
+                    case 'video':
+                        $media_url = $messageData['video']['link'];
+                        $caption = $messageData['video']['caption'] ?? null;
+                        break;
+                    case 'audio':
+                        $media_url = $messageData['audio']['link'];
+                        break;
+                    case 'document':
+                        $media_url = $messageData['document']['link'];
+                        $document_name = $messageData['document']['filename'];
+                        break;
+                    case 'sticker':
+                        $media_url = $messageData['sticker']['link'];
+                        break;
+                    case 'reaction':
+                        $reaction_emoji = $messageData['reaction']['emoji'];
+                        $reaction_message_id = $messageData['reaction']['message_id'];
+                        $message_body = "Reaccionò con: $reaction_emoji";
+                        break;
+                    case 'location':
+                        $latitude = $messageData['location']['latitude'];
+                        $longitude = $messageData['location']['longitude'];
+                        $message_body = "Ubicacion: Lat $latitude ,Long $longitude";
+                        break;
+                    case 'contacts': 
+                        $contact = $messageData['contacts'][0];
+                        $contact_name = $contact['name']['formatted_name'] ?? null;
+
+                        $phones = collect($contact['phones'])->pluck('phone')->toArray();
+                        $contact_phone_numbers = implode(', ', $phones );
+                        
+                        $emails = collect($contact['emails'])->pluck('email')->toArray();
+                        $contact_emails = implode(', ', $emails );
+
+                        $message_body = "Nombre del contacto: $contact_name\nPhones: $contact_phone_numbers\nEmails: $contact_emails";
+                    default;
+                        $message_body = "Tipo de mensaje no reconocido";
+                        break;
+                }
+
                 Message::create([
                     'customer_id' => $idCustomer,
                     'message' => $message_body,
@@ -97,6 +154,16 @@ class WebhookController extends Controller
                     'status' => $message_status,
                     'whatsapp_message_id' => $message_id,
                     'timestamp' => $timestamp,
+                    'media_url' => $media_url,
+                    'caption' => $caption,
+                    'latitude' => $latitude,
+                    'longitude' => $longitude,
+                    'reaction_emoji' => $reaction_emoji,
+                    'reaction_message_id' => $reaction_message_id,
+                    'contact_name' => $contact_name,
+                    'contact_phone_numbers' => $contact_phone_numbers,
+                    'contact_emails' => $contact_emails,
+                    'document_name' => $document_name
                 ]);
 
                 return response()->json([

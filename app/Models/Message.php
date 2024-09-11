@@ -17,9 +17,19 @@ class Message extends Model
         'message_type',
         'direction',
         'status',
-        'response_id',
         'media_url',
-        'caption'
+        'caption',
+        'latitude',
+        'longitude',
+        'document_name',
+        'reaction_emoji',
+        'reaction_message_id',
+        'contact_name',
+        'contact_phone_numbers',
+        'contact_emails',
+        'response_id',
+        'whatsapp_message_id',
+        'timestamp'
     ];
 
 
