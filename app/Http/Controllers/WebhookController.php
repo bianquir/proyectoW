@@ -14,7 +14,6 @@ class WebhookController extends Controller
 {
     
     private $verifyToken = 'ProyectoW2024-';
-
  
     
     public function verifyWebhook(Request $request)
@@ -227,32 +226,24 @@ class WebhookController extends Controller
                     }
                 }
 
-                return response()->json([
-                    'success' => true,
-                ], 200);  
+                return response()->json(['success' => true], 200);  
             }   
             else
             {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Estructura de datos incorrecta.',
-                ], 400);
+                return response()->json(['success' => false, 'message' => 'Estructura de datos incorrecta.'], 400);
             }
 
         }
         catch (Exception $e)
         {
-            Log::error('Error al procesar el webhook:', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
+            Log::error('Error al procesar el webhook:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
 
-            return response()->json([
-                'success' => false,
-                'error' => $e->getMessage(),
-            ], 500);
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
     }
+
+
+
 
     
 }

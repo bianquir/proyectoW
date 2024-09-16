@@ -56,6 +56,36 @@ return [
             'throw' => false,
         ],
 
+        'media_private' => [
+        'driver' => 'local',
+        'root' => storage_path('app/private/media'), 
+        'visibility' => 'private',
+        ],
+
+        'media_image' => [
+        'driver' => 'local',
+        'root' => storage_path('app/private/media/image'), 
+        'visibility' => 'private',
+        ],
+
+        'media_video' => [
+        'driver' => 'local',
+        'root' => storage_path('app/private/media/video'), 
+        'visibility' => 'private',
+        ],
+
+        'media_audio' => [
+        'driver' => 'local',
+        'root' => storage_path('app/private/media/audio'), 
+        'visibility' => 'private',
+        ],
+
+        'media_sticker' => [
+        'driver' => 'local',
+        'root' => storage_path('app/private/media/sticker'), 
+        'visibility' => 'private',
+        ],
+
     ],
 
     /*
