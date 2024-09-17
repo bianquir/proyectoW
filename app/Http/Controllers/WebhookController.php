@@ -8,6 +8,7 @@ use App\Models\Message;
 use Illuminate\Http\Request;
 use Exception;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class WebhookController extends Controller
@@ -243,6 +244,77 @@ class WebhookController extends Controller
     }
 
 
+    // $mediaFilesData = $this->handleMediaMessage($messageData, $message_type);
+    // Método para manejar mensajes multimedia
+    public function handleMediaMessage($messageData, $mediaType)
+    {
+        $mediaFilesData = [];
+
+        // Obtener el ID del archivo multimedia
+        $mediaId = $messageData[$mediaType]['id'];
+
+        // Obtener el enlace de descarga del archivo multimedia usando la API de WhatsApp
+        $mediaUrl = $this->getMediaUrlFromWhatsApp($mediaId);
+
+        // Definir el nombre del archivo según el tipo
+        $fileName = $mediaId . '.' . $this->getFileExtension($mediaType);
+
+        // Guardar el archivo en su carpeta correspondiente
+        $filePath = $this->saveMediaByType($mediaUrl, $mediaType, $fileName);
+
+        // Obtener el tipo MIME del archivo
+        $mimeType = $this->getMimeType($mediaType);
+
+        // Estructurar los datos del archivo multimedia en el mismo formato que espera $mediaFilesData
+        $mediaFilesData[] = [
+            'media_type' => $mediaType,
+            'media_url' => $filePath,  // Ruta donde se guarda el archivo
+            'mime_type' => $mimeType,   // Tipo MIME del archivo
+            'caption' => $messageData[$mediaType]['caption'] ?? null,  // Agregar un subtítulo si existe
+        ];
+
+        return $mediaFilesData;
+    }
+
+    // Método para obtener la extensión de archivo según el tipo
+    public function getFileExtension($mediaType)
+    {
+        $extensions = [
+            'image' => 'jpg',
+            'video' => 'mp4',
+            'audio' => 'mp3',
+            'sticker' => 'webp',
+            'document' => 'pdf', // Puedes ajustar según sea necesario
+        ];
+
+        return $extensions[$mediaType] ?? 'bin'; // 'bin' por defecto si no se reconoce el tipo
+    }
+
+    // Método para obtener el tipo MIME según el tipo de archivo
+    public function getMimeType($mediaType)
+    {
+        $mimeTypes = [
+            'image' => 'image/jpeg',
+            'video' => 'video/mp4',
+            'audio' => 'audio/ogg',
+            'sticker' => 'image/webp',
+            'document' => 'application/pdf',
+        ];
+
+        return $mimeTypes[$mediaType] ?? 'application/octet-stream';
+    }
+
+    // Método para obtener la URL del archivo multimedia desde la API de WhatsApp
+    public function getMediaUrlFromWhatsApp($mediaId)
+    {
+        $whatsappApiUrl = "https://graph.facebook.com/v15.0/$mediaId";
+
+        // Llama a la API de WhatsApp para obtener la URL del archivo multimedia
+        $response = Http::withToken('your-whatsapp-api-token')->get($whatsappApiUrl);
+
+        // Devuelve la URL del archivo multimedia
+        return $response['url'];
+    }
 
 
     
