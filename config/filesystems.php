@@ -86,6 +86,18 @@ return [
         'visibility' => 'private',
         ],
 
+        'media_document' => [
+        'driver' => 'local',
+        'root' => storage_path('app/private/media/document'), 
+        'visibility' => 'private',
+        ],
+
+        'media_extra' => [
+        'driver' => 'local',
+        'root' => storage_path('app/private/media/extra'), 
+        'visibility' => 'private',
+        ],
+
     ],
 
     /*

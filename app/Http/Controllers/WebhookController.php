@@ -415,7 +415,10 @@ class WebhookController extends Controller
                         }
                 
                         // Guarda el archivo en el disco
-                        $fileName = $mediaData['media_url'] . '.' . $mediaData['media_extension'];
+                        $extension_formated = explode('/', $mediaData['media_extension']);
+                        $extension_formated = end($extension_formated);
+
+                        $fileName = $mediaData['media_url'] . '.' . $extension_formated;
                         $filePath = $this->saveMediaToDisk($mediaData['media_url'], $mediaData['media_type'], $fileName);
                 
                         if ($filePath) {
@@ -424,11 +427,11 @@ class WebhookController extends Controller
                                 'message_id' => $message->id,
                                 'media_type' => $mediaData['media_type'],
                                 'media_url' => $fileName,  // Usa el nombre del archivo, no la ruta completa
-                                'media_extension' => $mediaData['media_extension'],
+                                'media_extension' => $extension_formated,
                                 'caption' => $mediaData['caption'] ?? null,
                             ]);
                         } else {
-                            Log::error('Failed to save media file to disk.', ['mediaData' => $mediaData]);
+                            Log::error('Fallo al guardar el archivo.', ['mediaData' => $mediaData]);
                         }
                     }
                 }
@@ -451,7 +454,8 @@ class WebhookController extends Controller
     private function handleMediaMessage($messageData, $mediaType, &$mediaFilesData)
     {
         $media_url = $messageData[$mediaType]['id']; 
-        $media_extension = $messageData[$mediaType]['mime_type'];
+        $media_extension = explode('/',$messageData[$mediaType]['mime_type']);
+        $media_extension = end($media_extension);
         $caption = $messageData[$mediaType]['caption'] ?? null;
     
         $mediaFilesData[] = [
@@ -460,6 +464,8 @@ class WebhookController extends Controller
             'media_extension' => $media_extension, 
             'caption' => $caption,
         ];
+
+        return $mediaFilesData;
     }
     
     // Maneja los mensajes de tipo contacto
@@ -484,28 +490,31 @@ class WebhookController extends Controller
             'video' => 'media_video',
             'audio' => 'media_audio',
             'sticker' => 'media_sticker',
-            default => 'media_private',
+            'document' => 'media_document',
+            default => 'media_extra',
         };
     
         if (empty($fileName)) {
-            Log::error('File name is empty or undefined.');
+            Log::error('Nombre de archivo incompatible.');
             return null;
         }
     
         try {
             // Obtiene el contenido del archivo desde la URL
             $fileContent = Http::get($this->getMediaUrlFromWhatsApp($mediaUrl))->body();
+
+            dd($fileContent);
             
             // Guarda el contenido del archivo en el disco
             Storage::disk($disk)->put($fileName, $fileContent);
         
             // Construye la ruta completa manualmente
-            $filePath = storage_path('app/' . $disk . '/' . $fileName);
+            $filePath = storage_path('app/private' . $disk . '/' . $fileName);
             
-            Log::info("File saved successfully. Disk: $disk, File Name: $fileName, Path: $filePath");
+            Log::info("Archivo guardado. Carpeta: $disk, Nombre del archivo: $fileName, Ruta: $filePath");
             return $fileName;  // Retorna el nombre del archivo, no la ruta completa
         } catch (\Exception $e) {
-            Log::error('Error saving media to disk:', ['error' => $e->getMessage()]);
+            Log::error('Error al guardar el archivo:', ['error' => $e->getMessage()]);
             return null;
         }
     }
@@ -517,11 +526,16 @@ class WebhookController extends Controller
         $whatsapp_version = env('WHATSAPP_API_VERSION');
         $whatsapp_token = env('WHATSAPP_ACCESS_TOKEN');
         $whatsappUrlFull = $whatsappUrl . $whatsapp_version . $mediaId;
-    
+        
+
         try {
             $response = Http::withToken($whatsapp_token)->get($whatsappUrlFull);
+
             if ($response->successful()) {
+
+
                 return $response->json('url'); // Asegúrate de que esta clave exista en la respuesta
+
             } else {
                 Log::error('Error fetching media URL from WhatsApp', ['response' => $response->body()]);
             }
