@@ -19,13 +19,13 @@ class CustomerFactory extends Factory
         return [
             'dni'=>fake()->unique()->numberBetween('30000000', '50000000'),
             'cuil' => fake()->unique()->numberBetween('30000000000', '50000000'),
-            'id_message'=>fake()->numberBetween('1', '10000'),
-            'tag_id'=>fake()->numberBetween('1', '10'),
-            'order_id'=>fake()->numberBetween('1', '20'),
             'name'=>fake()->firstName(),
             'lastname'=>fake()->lastName(),
-            'phone' => fake()->numberBetween(1000000000000, 9999999999999), 
+            'wa_id'=>fake()->unique()->numberBetween('100', '150'),
             'email'=>fake()->email(),
+            'address' => fake()->address(),
+            'created_at'=>now(),
+            'updated_at' =>now()
         ];
     }
 }

@@ -19,28 +19,28 @@ use App\Http\Controllers\WebhookController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::resource('tag', TagController::class);
-    Route::resource('customer',CustomerController::class);
-    Route::resource('products',ProductController::class);
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+//     Route::resource('tag', TagController::class);
+//     Route::resource('customer',CustomerController::class);
+//     Route::resource('products',ProductController::class);
 
-    Route::get('/send-message/{type}', [MessageController::class, 'sendMessage'])->name('message.sendPlaceholder');
-    Route::get('/clientes', function () {
-        return view('clientesDatos');
-    });
-    Route::get('/search', [CustomerController::class, 'search'])->name('customer.search');
-});
+//     Route::get('/send-message/{type}', [MessageController::class, 'sendMessage'])->name('message.sendPlaceholder');
+//     Route::get('/clientes', function () {
+//         return view('clientesDatos');
+//     });
+//     Route::get('/search', [CustomerController::class, 'search'])->name('customer.search');
+// });
 Route::get('/webhook', [WebhookController::class, 'verifyWebhook']);
 Route::post('/webhook', [WebhookController::class, 'receiveMessage']);
 

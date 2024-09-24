@@ -20,7 +20,6 @@ class ProductFactory extends Factory
             'name' => fake()->cityPrefix(),
             'description' => fake()->realText($maxNbChars = 20, $indexSize = 1),
             'price' => fake()->randomDigitNotNull(),
-            'stock' => fake()->randomDigitNotNull()
         ];
     }
 }
