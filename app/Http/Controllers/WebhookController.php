@@ -454,8 +454,26 @@ class WebhookController extends Controller
     private function handleMediaMessage($messageData, $mediaType, &$mediaFilesData)
     {
         $media_url = $messageData[$mediaType]['id']; 
-        $media_extension = explode('/',$messageData[$mediaType]['mime_type']);
+
+        $mimeType = $messageData[$mediaType]['mime_type'];
+
+        $media_extension = explode(';', $mimeType)[0]; // Toma solo la primera parte antes de ';'
+        $media_extension = explode('/', $media_extension); // Separa en "tipo/extension"
         $media_extension = end($media_extension);
+
+        $validExtensions = [
+            'image' => ['jpeg', 'png', 'gif'],
+            'video' => ['mp4', '3gp', 'avi'],
+            'audio' => ['ogg', 'mp3', 'wav'],
+            'document' => ['pdf', 'docx', 'xlsx'],
+            'sticker' => ['webp']
+        ];
+        if (!in_array($media_extension, $validExtensions[$mediaType] ?? [])) {
+            Log::warning("Tipo de archivo no soportado: $mimeType (extensión: $media_extension)");
+            return; // Termina si no es un tipo soportado
+        }
+
+
         $caption = $messageData[$mediaType]['caption'] ?? null;
     
         $mediaFilesData[] = [
@@ -485,6 +503,9 @@ class WebhookController extends Controller
     
     public function saveMediaToDisk($mediaUrl, $mediaType, $fileName)
     {
+
+        $whatsapp_token = env('WHATSAPP_ACCESS_TOKEN');
+        
         $disk = match($mediaType) {
             'image' => 'media_image',
             'video' => 'media_video',
@@ -501,15 +522,21 @@ class WebhookController extends Controller
     
         try {
             // Obtiene el contenido del archivo desde la URL
-            $fileContent = Http::get($this->getMediaUrlFromWhatsApp($mediaUrl))->body();
+            $mediaDonwloadUrl = $this->getMediaUrlFromWhatsApp($mediaUrl);
 
-            dd($fileContent);
-            
+            if (empty($mediaUrl)) {
+                Log::error('No se pudo obtener la URL del archivo desde WhatsApp.');
+                return null;
+            }
+
+            $fileContent = Http::withToken($whatsapp_token)->get($mediaDonwloadUrl)->body();
+
+
             // Guarda el contenido del archivo en el disco
             Storage::disk($disk)->put($fileName, $fileContent);
         
             // Construye la ruta completa manualmente
-            $filePath = storage_path('app/private' . $disk . '/' . $fileName);
+            $filePath = storage_path('app/private/' . $disk . '/' . $fileName);
             
             Log::info("Archivo guardado. Carpeta: $disk, Nombre del archivo: $fileName, Ruta: $filePath");
             return $fileName;  // Retorna el nombre del archivo, no la ruta completa
@@ -527,25 +554,19 @@ class WebhookController extends Controller
         $whatsapp_token = env('WHATSAPP_ACCESS_TOKEN');
         $whatsappUrlFull = $whatsappUrl . $whatsapp_version . $mediaId;
         
-
         try {
             $response = Http::withToken($whatsapp_token)->get($whatsappUrlFull);
-
             if ($response->successful()) {
-
-
                 return $response->json('url'); // Asegúrate de que esta clave exista en la respuesta
-
             } else {
                 Log::error('Error fetching media URL from WhatsApp', ['response' => $response->body()]);
+
+                return '';
             }
         } catch (\Exception $e) {
             Log::error('Error fetching media URL from WhatsApp:', ['error' => $e->getMessage()]);
         }
-    
-        return '';
     }
-    
     
     
 }
