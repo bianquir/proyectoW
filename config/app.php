@@ -200,9 +200,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\Filament\AdminPanelProvider::class,
 
-        App\Providers\Filament\FrancoPanelProvider::class,
-
         App\Providers\Filament\BiancaPanelProvider::class,
+        App\Providers\Filament\FrancoPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
 
     ],
