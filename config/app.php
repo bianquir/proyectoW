@@ -199,15 +199,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\Filament\AdminPanelProvider::class,
-<<<<<<< Updated upstream
+
         App\Providers\Filament\FrancoPanelProvider::class,
-=======
-<<<<<<< HEAD
+
         App\Providers\Filament\BiancaPanelProvider::class,
-=======
-        App\Providers\Filament\FrancoPanelProvider::class,
->>>>>>> 499049aa7fdd846bdba83a3129625621477f8249
->>>>>>> Stashed changes
         App\Providers\RouteServiceProvider::class,
 
     ],
