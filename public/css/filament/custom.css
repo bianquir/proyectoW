@@ -1,13 +1,66 @@
 /* Estilos para la vista del chat de whatsapp */
-
-.chat-wrapper {
-    height: 600px;
-    width: 1300px;
+.fi-main {
+    margin-left: auto; 
+    margin-right: auto; 
+    height: 100%; 
+    width: 100%; 
+    padding-left: 0; 
+    padding-right: 0; 
+    padding-top: 0; 
+    padding-bottom: 0; 
 }
 
+section {
+    display: flex !important; 
+    flex-direction: column !important; 
+    gap: 0 !important; 
+    padding-top: 0 !important; 
+    padding-bottom: 0 !important; 
+}
+
+
+@media (max-width: 768px) {
+    .sidebar-chat {
+        display: none; /* Esconde la barra lateral en pantallas pequeñas */
+    }
+
+    .chat-wrapper {
+        height: auto;
+        width: 100%;
+        margin: 0!important;
+        padding: 0!important;
+    }
+
+    .chat-window {
+        width: 100%;
+    }
+
+    .chat-input {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .chat-item {
+        padding: 6px 12px;
+        font-size: 10px;
+    }
+
+    .chat-header {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .message-content {
+        padding: 8px;
+        font-size: 10px;
+    }
+}
+
+/* 
 .flex-1 {
     flex: 1 1 auto;
-}
+} */
 
 .bg {
     background-color: #ffffff;
@@ -19,18 +72,19 @@
     width: 30%;
     background-color: #f8f9fa;
     border-right: 1px solid #ddd;
+    height: 100vh; 
     
 }
 
 .search-bar {
     width: 100%;
-    padding: 5px 10px;
+    height: 40px;
+    padding: 5px 20px;
     border-radius: 20px;
     background-color: #fff;
     border: 1px solid #ccc;
     font-size: 12px;
-    height: 40px;
-    
+
 }
 
 
@@ -39,15 +93,18 @@
     top: 0;
     z-index: 100;
     background-color: #f3f4f6; /* El mismo color de fondo que el contenedor */
-    padding: 8px;
+    padding: 12px;
+   
+    
 }
 
 .button-wrapper {
     position: sticky;
-    top: 56px; /* La altura de la barra de búsqueda */
+    top: 64px; /* La altura de la barra de búsqueda */
     z-index: 100;
     background-color: #ffffff;
     padding: 8px;
+   
 }
 
 .chat-list {
@@ -59,11 +116,11 @@
 
 .chat-item {
     display: flex;
-    padding: 8px 16px;
+    /*padding: 8px 16px;*/
     align-items: center;
     border-radius: 8px;
     background-color: #fff; 
-    font-size: 12px; 
+    /* font-size: 12px;  */
 }
 
 .chat-item:hover, .selected {
@@ -75,15 +132,12 @@
     height: 50px;
     border-radius: 50%;
     margin-right: 12px ;
+    margin-left: 12px;
     background-color: #ccc; 
 }
 
 .chat-name {
     font-size: 12px; 
-}
-
-.last-message {
-    color: #666; /* Color de texto más suave para el último mensaje */
 }
 
 /* Estilos adicionales para mejor legibilidad */
@@ -95,8 +149,8 @@
 .chat-header {
     background-color: #f7f7f7;
     border-bottom: 1px solid #ddd;
-    padding: 15px;
-    font-size: 12px;
+    /* padding: 15px;
+    font-size: 12px; */
     height: 65px;
 }
 
@@ -115,10 +169,10 @@
     font-size: 12px;
 }
 
-.message-content {
+/* .message-content {
     padding: 10px;
     border-radius: 15px;
-}
+} */
 
 .sent {
     background-color: #dcf8c6;
@@ -133,7 +187,7 @@
 /* Input del Mensaje */
 .chat-input {
     display: flex;
-    padding: 15px;
+    /* padding: 15px; */
     border-top: 1px solid #ddd;
     background-color: #f1f1f1;
 }
@@ -155,12 +209,23 @@
 
 .chat-input button {
     padding: 10px 15px;
-    background-color: #075e54;
-    color: white;
-    border: none;
     border-radius: 50%;
     cursor: pointer;
-    
+    color: #ffffff !important;
+    font-size: 12px;  
+    font-weight: 30;
+    background: rgb(84, 131, 131);
+    border: 1px solid;
+    border-color: rgba(24, 122, 122, 0.753);
+    transition: all 1s ease;
+    position: relative;
+    margin-left: 5px;
+    margin-right: 5px; 
+}
+
+.chat-input button:hover {
+    background: rgb(21, 114, 114);
+    color: #fff !important;
 }
 
 /* Estilos adicionales */
@@ -175,13 +240,6 @@ input[type="text"]:focus {
     border-color: #c7c7c7; /* O el color que prefieras */
     box-shadow: none;
     outline: none;
-}
-
-button {
-    padding: 10px 20px;
-    border-radius: 50%;
-    background-color: #25d366; /* Color de WhatsApp */
-    color: white;
 }
 
 .button-filter{
@@ -205,4 +263,10 @@ button {
       }
 
 
-  
+  .text-time {
+    font-size: 0.75rem; /* Equivale a text-xs en Tailwind */
+    display: block;     /* Equivale a block */
+    margin-top: 0.25rem; /* Equivale a mt-1 (4px) */
+    text-align: right;  /* Para alinear a la derecha */
+    color: #888;
+  }

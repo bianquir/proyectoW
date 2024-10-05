@@ -6,12 +6,12 @@
     <script src="{{ asset('/js/filament/custom.js') }}"></script>
 @endpush
 
-<div class="flex chat-wrapper h-screen overflow-hidden bg">
+<div section class="chat-wrapper flex flex-col md:flex-row h-screen bg">
     <!-- Sidebar de Contactos (Clientes) -->
-<div class="sidebar-chat w-1/4 overflow-y-auto flex-shrink-0">
+<div class="sidebar-chat w-full md:w-1/4 overflow-y-auto flex-shrink-0">
     <!-- Barra de búsqueda -->
     <div class="search-bar-wrapper p-4 bg-gray-200">
-        <input type="text" placeholder="Buscar o empezar un chat nuevo" class="search-bar input">
+        <input type="text" placeholder="Buscar chat..." class="search-bar input">
     </div>
 
     <!-- Botones de filtro (Todos, No leídos, Grupos) -->
@@ -28,15 +28,12 @@
                  wire:click="selectCustomer({{ $customer->id }})">
                 <!-- Avatar del cliente -->
                 <div class="avatar flex items-center justify-center mr-4 overflow-hidden">
-                    <img src="{{ $customer->avatar_url ?? asset('default-avatar.png') }}" alt="avatar" class="w-full h-full rounded-full">
+                    <img src="{{ asset('img/CriticalDevs.png') }}" alt="avatar" class="w-full h-full rounded-full">
                 </div>
-                <!-- Nombre del cliente y último mensaje -->
+                <!-- Nombre del cliente-->
                 <div class="flex-1 min-w-0">
-                    <h3 class="chat-name font-semibold truncate">{{ $customer->name }}</h3>
-                    <p class="last-message text-sm text-gray-600 truncate">{{ $customer->last_message }}</p>
+                    <h3 class="chat-name font-semibold truncate">{{ $customer->name.' '.$customer->lastname }}</h3>
                 </div>
-                <!-- Tiempo del último mensaje -->
-                <span class="text-xs text-gray-500 whitespace-nowrap">{{ $customer->last_message_time }}</span>
             </div>
         @endforeach
     </div>
@@ -44,7 +41,7 @@
 
 
     <!-- Ventana de Chat -->
-    <div class="chat-window flex-1 flex flex-col">
+    <div class="chat-window flex-1 flex flex-col h-full bg-white overflow-hidden">
         <!-- Header del Chat -->
         <div class="chat-header flex items-center">
             <div class="avatar flex items-center justify-center mr-3 overflow-hidden">
@@ -63,13 +60,31 @@
 
 
         <!-- Mensajes del Chat -->
-        <div id="chat-messages" class="chat-messages flex-1 overflow-y-auto p-4" wire:scroll.debounce.250ms="onScroll">
+        <div id="chat-messages" class="chat-messages flex-1 overflow-y-auto p-2" wire:scroll.debounce.250ms="onScroll">
             @if ($messages->isNotEmpty())
+                @php
+                    $lastDate = null;
+                @endphp
                 @foreach($messages as $message)
+                @php
+                $messageDate = \Carbon\Carbon::parse($message->timestamp)->format('Y-m-d');
+            @endphp
+
+            <!-- Mostrar fecha si el día cambia -->
+            @if ($lastDate !== $messageDate)
+            <div class="date-separator text-center text-gray-500 my-2">
+                <span>{{ $this->formatMessageDate($message->timestamp) }}</span>
+            </div>
+            @php
+                $lastDate = $messageDate;
+            @endphp
+        @endif
+
+            <!-- Mensaje -->
                     <div class="message flex mb-2 {{ $message->direction == 'outbound' ? 'justify-end' : 'justify-start' }}">
-                        <div class="message-content p-3 rounded-lg max-w-xs {{ $message->direction == 'outbound' ? 'sent' : 'received' }} shadow-md">
+                        <div class="message-content p-3 rounded-lg max-w-full md:max-w-xs {{ $message->direction == 'outbound' ? 'sent' : 'received' }} shadow-md">
                             <p class="text-xs">{{ $message->message }}</p>
-                            <span class="text-xs block mt-1">{{ \Carbon\Carbon::parse($message->timestamp)->format('H:i') }}</span>
+                            <span class="text-time">{{ \Carbon\Carbon::parse($message->timestamp)->format('H:i') }}</span>
                         </div>
                     </div>
                 @endforeach
@@ -85,10 +100,13 @@
         
         <!-- Input del Mensaje -->
         @if ($selectedCustomer)
-            <div class="chat-input flex items-center">
-                <input wire:model="newMessage" type="text" placeholder="Escribe un mensaje...">
-                <button wire:click="sendMessage">Enviar</button>
-            </div>
+        <div class="chat-input flex items-center p-3 border-t border-gray-300 bg-gray-100">
+            <input wire:model="newMessage" type="text" placeholder="Escribe un mensaje..."
+                class="flex-1 p-2 text-sm border rounded-full outline-none focus:ring focus:ring-blue-300">
+            <button wire:click="sendMessage">
+                Enviar
+            </button>
+        </div>
         @endif
     </div>
 </div>

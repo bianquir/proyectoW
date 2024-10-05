@@ -5,6 +5,8 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Message;
 use App\Models\Customer;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ChatView extends Component
 {
@@ -15,15 +17,49 @@ class ChatView extends Component
     public $loadingMore = false;
 
     public function mount()
-    {
-        $this->customers = Customer::all();
+{
+    // Obtener el último mensaje de cada cliente
+    $lastMessages = Message::select('customer_id', DB::raw('MAX(timestamp) as last_timestamp'))
+        ->groupBy('customer_id')
+        ->get();
 
-        // Selecciona el primer cliente como predeterminado
-        if ($this->customers->isNotEmpty()) {
-            $this->selectedCustomer = $this->customers->first()->id;
-            $this->loadMessages(); // Cargar mensajes del cliente seleccionado
-        }
+    // Obtener los clientes y sus últimos mensajes
+    $this->customers = Customer::with(['messages' => function ($query) {
+        $query->orderBy('timestamp', 'desc')->limit(1); // Obtener solo el último mensaje
+    }])
+    ->whereIn('id', $lastMessages->pluck('customer_id')) // Filtrar solo los clientes que tienen mensajes
+    ->get()
+    ->sortByDesc(function ($customer) use ($lastMessages) {
+        $lastMessage = $lastMessages->firstWhere('customer_id', $customer->id);
+        return $lastMessage ? $lastMessage->last_timestamp : null; // Ordenar clientes por el último mensaje
+    });
+
+    // Seleccionar el primer cliente como predeterminado
+    if ($this->customers->isNotEmpty()) {
+        $this->selectedCustomer = $this->customers->first()->id;
+        $this->loadMessages(); // Cargar mensajes del cliente seleccionado
     }
+}
+
+public function formatMessageDate($timestamp)
+{
+    $messageDate = Carbon::parse($timestamp);
+    $now = Carbon::now();
+
+    // Si es hoy
+    if ($messageDate->isToday()) {
+        return 'Today';
+    }
+
+    // Si es en esta misma semana
+    if ($messageDate->isSameWeek($now)) {
+        return $messageDate->translatedFormat('l'); // Lunes, Martes, etc.
+    }
+
+    // Si es más antiguo que una semana, mostrar la fecha completa
+    return $messageDate->translatedFormat('d M Y');
+}
+
 
     public function loadMessages()
     {
