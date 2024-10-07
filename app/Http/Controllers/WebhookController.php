@@ -45,7 +45,6 @@ class WebhookController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
-        
     }
 
     
@@ -87,6 +86,8 @@ class WebhookController extends Controller
                 $message_body = '';
                 $mediaFilesData = [];
                 $contactReceived = [];
+                $contactReceived['contact_name'] = null;
+                $contactReceived['contact_phone_numbers'] = null;
     
                 // Manejar diferentes tipos de mensajes
                 switch ($message_type) {
@@ -131,8 +132,8 @@ class WebhookController extends Controller
                     'direction' => $message_direction,
                     'status' => $message_status,
                     'whatsapp_message_id' => $message_id,
-                    'contact_name' => $contactReceived['contact_name']??'', 
-                    'contact_phone_numbers' => implode(', ', $contactReceived['contact_phone_numbers'])??'',
+                    'contact_name' => isset($contactReceived['contact_name']) ? $contactReceived['contact_name'] : '', 
+                    'contact_phone_numbers' => isset($contactReceived['contact_phone_numbers']) ? implode(', ', $contactReceived['contact_phone_numbers']) : '',
                     'timestamp' => $timestamp,
                 ]);
     
@@ -233,11 +234,11 @@ private function handleContactMessage($messageData, &$message_body)
 
 
         $contactReceived = ['contact_name' => $contact_name,'contact_phone_numbers' => $phones ];
-        // Retorna el contacto como array para usar en otra parte del código
+        
         return $contactReceived;
     }
 
-    // Si no hay contactos en el mensaje, retorna null o lo que prefieras manejar
+    
     return null;
 }
 
@@ -268,7 +269,6 @@ private function handleContactMessage($messageData, &$message_body)
                 Log::error('No se pudo obtener la URL del archivo desde WhatsApp.');
                 return null;
             }
-
             $fileContent = Http::withToken($whatsapp_token)->get($mediaDonwloadUrl)->body();
 
 

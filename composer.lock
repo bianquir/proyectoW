@@ -3949,7 +3949,7 @@
         },
         {
             "name": "openspout/openspout",
-<<<<<<< Updated upstream
+
             "version": "v4.26.0",
             "source": {
                 "type": "git",
@@ -3960,31 +3960,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/openspout/openspout/zipball/a49b947c0c109f4fd112f9b5c6d6cb3e6baf8b50",
                 "reference": "a49b947c0c109f4fd112f9b5c6d6cb3e6baf8b50",
-=======
-<<<<<<< HEAD
-            "version": "v4.25.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/openspout/openspout.git",
-                "reference": "519affe730d92e1598720a6467227fc28550f0e6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/openspout/openspout/zipball/519affe730d92e1598720a6467227fc28550f0e6",
-                "reference": "519affe730d92e1598720a6467227fc28550f0e6",
-=======
-            "version": "v4.26.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/openspout/openspout.git",
-                "reference": "a49b947c0c109f4fd112f9b5c6d6cb3e6baf8b50"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/openspout/openspout/zipball/a49b947c0c109f4fd112f9b5c6d6cb3e6baf8b50",
-                "reference": "a49b947c0c109f4fd112f9b5c6d6cb3e6baf8b50",
->>>>>>> 499049aa7fdd846bdba83a3129625621477f8249
->>>>>>> Stashed changes
+
                 "shasum": ""
             },
             "require": {
@@ -4004,15 +3980,9 @@
                 "phpstan/phpstan": "^1.12.4",
                 "phpstan/phpstan-phpunit": "^1.4.0",
                 "phpstan/phpstan-strict-rules": "^1.6.1",
-<<<<<<< Updated upstream
+
                 "phpunit/phpunit": "^11.3.6"
-=======
-<<<<<<< HEAD
-                "phpunit/phpunit": "^10.5.20 || ^11.3.6"
-=======
-                "phpunit/phpunit": "^11.3.6"
->>>>>>> 499049aa7fdd846bdba83a3129625621477f8249
->>>>>>> Stashed changes
+
             },
             "suggest": {
                 "ext-iconv": "To handle non UTF-8 CSV files (if \"php-mbstring\" is not already installed or is too limited)",
@@ -4060,15 +4030,9 @@
             ],
             "support": {
                 "issues": "https://github.com/openspout/openspout/issues",
-<<<<<<< Updated upstream
+
                 "source": "https://github.com/openspout/openspout/tree/v4.26.0"
-=======
-<<<<<<< HEAD
-                "source": "https://github.com/openspout/openspout/tree/v4.25.0"
-=======
-                "source": "https://github.com/openspout/openspout/tree/v4.26.0"
->>>>>>> 499049aa7fdd846bdba83a3129625621477f8249
->>>>>>> Stashed changes
+
             },
             "funding": [
                 {
@@ -4080,15 +4044,9 @@
                     "type": "github"
                 }
             ],
-<<<<<<< Updated upstream
+
             "time": "2024-09-24T14:04:43+00:00"
-=======
-<<<<<<< HEAD
-            "time": "2024-09-24T09:03:42+00:00"
-=======
-            "time": "2024-09-24T14:04:43+00:00"
->>>>>>> 499049aa7fdd846bdba83a3129625621477f8249
->>>>>>> Stashed changes
+
         },
         {
             "name": "phpoption/phpoption",
@@ -6997,7 +6955,7 @@
         },
         {
             "name": "symfony/string",
-<<<<<<< Updated upstream
+
             "version": "v7.1.5",
             "source": {
                 "type": "git",
@@ -7008,31 +6966,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/string/zipball/d66f9c343fa894ec2037cc928381df90a7ad4306",
                 "reference": "d66f9c343fa894ec2037cc928381df90a7ad4306",
-=======
-<<<<<<< HEAD
-            "version": "v6.4.12",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/string.git",
-                "reference": "f8a1ccebd0997e16112dfecfd74220b78e5b284b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/f8a1ccebd0997e16112dfecfd74220b78e5b284b",
-                "reference": "f8a1ccebd0997e16112dfecfd74220b78e5b284b",
-=======
-            "version": "v7.1.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/string.git",
-                "reference": "d66f9c343fa894ec2037cc928381df90a7ad4306"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/d66f9c343fa894ec2037cc928381df90a7ad4306",
-                "reference": "d66f9c343fa894ec2037cc928381df90a7ad4306",
->>>>>>> 499049aa7fdd846bdba83a3129625621477f8249
->>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -7090,15 +7023,8 @@
                 "utf8"
             ],
             "support": {
-<<<<<<< Updated upstream
+
                 "source": "https://github.com/symfony/string/tree/v7.1.5"
-=======
-<<<<<<< HEAD
-                "source": "https://github.com/symfony/string/tree/v6.4.12"
-=======
-                "source": "https://github.com/symfony/string/tree/v7.1.5"
->>>>>>> 499049aa7fdd846bdba83a3129625621477f8249
->>>>>>> Stashed changes
             },
             "funding": [
                 {
@@ -7114,15 +7040,8 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< Updated upstream
+
             "time": "2024-09-20T08:28:38+00:00"
-=======
-<<<<<<< HEAD
-            "time": "2024-09-20T08:15:52+00:00"
-=======
-            "time": "2024-09-20T08:28:38+00:00"
->>>>>>> 499049aa7fdd846bdba83a3129625621477f8249
->>>>>>> Stashed changes
         },
         {
             "name": "symfony/translation",

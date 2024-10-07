@@ -7,6 +7,7 @@ use App\Models\Message;
 use App\Models\Customer;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class ChatView extends Component
 {
@@ -112,8 +113,42 @@ public function formatMessageDate($timestamp)
         $this->loadMessages();
     }
 
-    public function sendMessage()
+    public function sendMessage($customerId)
     {
+        $customer = Customer::find($customerId);
+
+
+        $whatsapp_api_url = env('WHATSAPP_API_URL');
+        $whatsapp_api_version = env('WHATSAPP_API_VERSION');
+        $whatsapp_api_number_id = env('WHATSAPP_PHONE_NUMBER_ID');
+        $access_token = env('WHATSAPP_ACCESS_TOKEN');
+
+        $whatsapp_full_url = $whatsapp_api_url . '/' . $whatsapp_api_version . '/' . $whatsapp_api_number_id . '/messages'; 
+
+        $data = [
+            'messaging_product' => 'whatsapp',
+            'to' => $customer->wa_id,
+            'type' => 'text',
+            'text' => [
+                'body' => $this->newMessage,
+            ],
+        ];
+
+
+        $response = Http::withToken($access_token)->post($whatsapp_full_url, $data);
+
+
+        if ($response->successful()) {
+            // Limpiar el formulario después de enviar
+            $this->newMessage = '';
+
+            $this->loadMoreMessages();
+        } else {
+            // Mostrar mensaje de error
+            session()->flash('error', 'Error al enviar el mensaje.');
+        }
+    
+
         // Crear un nuevo mensaje para el cliente seleccionado
         $message = Message::create([
             'customer_id' => $this->selectedCustomer,
@@ -129,7 +164,7 @@ public function formatMessageDate($timestamp)
 
         // Limpiar el campo de nuevo mensaje
         $this->newMessage = '';
-        $this->dispatchBrowserEvent('message-sent');
+        // $this->dispatchBrowserEvent('message-sent');
     }
 
     public function render()

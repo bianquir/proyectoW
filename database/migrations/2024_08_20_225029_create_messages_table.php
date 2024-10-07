@@ -18,7 +18,7 @@ return new class extends Migration
             //Mensajes generales
             $table->text('message');
             $table->enum('message_type', ['text', 'image', 'video', 'document', 'audio', 'sticker', 'location', 'contacts', 'reaction', 'poll', 'button', 'template']);
-            $table->enum('direction', ['incoming', 'outgoing']);
+            $table->enum('direction', ['incoming', 'outbound']);
             $table->enum('status', ['sent', 'delivered', 'read', 'failed', 'pending', 'received'])->default('sent');
 
             //Ubicacion
