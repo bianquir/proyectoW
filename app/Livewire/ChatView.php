@@ -142,7 +142,7 @@ public function formatMessageDate($timestamp)
             // Limpiar el formulario después de enviar
             $this->newMessage = '';
 
-            $this->loadMoreMessages();
+            $this->loadMessages();
         } else {
             // Mostrar mensaje de error
             session()->flash('error', 'Error al enviar el mensaje.');
@@ -165,6 +165,7 @@ public function formatMessageDate($timestamp)
         // Limpiar el campo de nuevo mensaje
         $this->newMessage = '';
         // $this->dispatchBrowserEvent('message-sent');
+        $this->loadMessages();
     }
 
     public function render()
