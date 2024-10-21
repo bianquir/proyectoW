@@ -19,7 +19,7 @@ class Customer extends Model
 
     public function tags()
     {
-        return $this->belongsToMany(Tag::class, 'assigned_tags');
+        return $this->belongsToMany(Tag::class, 'assigned_tags')->withTimestamps();
     }
 
     public function messages()

@@ -14,6 +14,6 @@ class Tag extends Model
     
     public function customers()
     {
-        return $this->belongsToMany(Customer::class,'assigned_tags');
+        return $this->belongsToMany(Customer::class, 'assigned_tags')->withTimestamps();
     }
 }

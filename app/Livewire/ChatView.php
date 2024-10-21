@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Message;
 use App\Models\Customer;
+use App\Models\Tag;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -16,6 +17,9 @@ class ChatView extends Component
     public $messages;
     public $newMessage; 
     public $loadingMore = false;
+    public $showModal;
+    public $tags= [];
+    public $selectedTags = []; 
 
     public function mount()
 {
@@ -166,6 +170,34 @@ public function formatMessageDate($timestamp)
         $this->newMessage = '';
         // $this->dispatchBrowserEvent('message-sent');
         $this->loadMessages();
+    }
+
+    public function openModal()
+    {
+        $this->tags = Tag::all();  // Cargar todas las etiquetas
+        $this->selectedTags = [];  // Limpiar las etiquetas seleccionadas
+        $this->showModal = true;
+    }
+
+    public function closeModal()
+    {
+        $this->showModal = false;
+    }
+
+    public function saveTags()
+    {
+        // Obtener el cliente seleccionado
+        $customer = Customer::find($this->selectedCustomer);
+
+        // Asignar las etiquetas seleccionadas al cliente
+        // El método sync manejará automáticamente los timestamps
+        $customer->tags()->sync($this->selectedTags);
+
+        // Cerrar el modal después de guardar
+        $this->showModal = false;
+
+        // Establecer el mensaje de éxito en la sesión
+        session()->flash('success', 'Etiquetas asignadas con éxito.');
     }
 
     public function render()

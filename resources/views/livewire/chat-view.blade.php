@@ -8,36 +8,36 @@
 
 <div section class="chat-wrapper flex flex-col md:flex-row h-screen bg">
     <!-- Sidebar de Contactos (Clientes) -->
-<div class="sidebar-chat w-full md:w-1/4 overflow-y-auto flex-shrink-0">
-    <!-- Barra de búsqueda -->
-    <div class="search-bar-wrapper p-4 bg-gray-200">
-        <input type="text" placeholder="Buscar chat..." class="search-bar input">
-    </div>
+    <div class="sidebar-chat w-full md:w-1/4 overflow-y-auto flex-shrink-0">
+        <!-- Barra de búsqueda -->
+        <div class="search-bar-wrapper p-4 bg-gray-200">
+            <input type="text" placeholder="Buscar chat..." class="search-bar input">
+        </div>
 
-    <!-- Botones de filtro (Todos, No leídos, Grupos) -->
-    <div class="button-wrapper flex justify-around p-2 m-12 bg-white border-b">
-        <button class="button-filter">Todos</button>
-        <button class="button-filter">No leídos</button>
-        <button class="button-filter">Grupos</button>
-    </div>
+        <!-- Botones de filtro (Todos, No leídos, Grupos) -->
+        <div class="button-wrapper flex justify-around p-2 m-12 bg-white border-b">
+            <button class="button-filter">Todos</button>
+            <button class="button-filter">No leídos</button>
+            <button class="button-filter">Grupos</button>
+        </div>
 
-    <!-- Lista de Clientes -->
-    <div class="chat-list space-y-1">
-        @foreach($customers as $customer)
-            <div class="chat-item flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-300 {{ $selectedCustomer === $customer->id ? 'selected' : '' }}"
-                 wire:click="selectCustomer({{ $customer->id }})">
+        <!-- Lista de Clientes -->
+        <div class="chat-list space-y-1">
+            @foreach($customers as $customer)
+                <div class="chat-item flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-300 {{ $selectedCustomer === $customer->id ? 'selected' : '' }}"
+                wire:click="selectCustomer({{ $customer->id }})">
                 <!-- Avatar del cliente -->
-                <div class="avatar flex items-center justify-center mr-4 overflow-hidden">
-                    <img src="{{ asset('img/CriticalDevs.png') }}" alt="avatar" class="w-full h-full rounded-full">
-                </div>
+                    <div class="avatar flex items-center justify-center mr-4 overflow-hidden">
+                        <img src="{{ asset('img/CriticalDevs.png') }}" alt="avatar" class="w-full h-full rounded-full">
+                    </div>
                 <!-- Nombre del cliente-->
-                <div class="flex-1 min-w-0">
-                    <h3 class="chat-name font-semibold truncate">{{ $customer->name.' '.$customer->lastname }}</h3>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="chat-name font-semibold truncate">{{ $customer->name.' '.$customer->lastname }}</h3>
+                    </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
-</div>
 
 
     <!-- Ventana de Chat -->
@@ -48,8 +48,43 @@
                 <span>{{ substr($customer->name, 0, 1) }}</span>
             </div>
             <h2 class="text-xl font-bold truncate">
-                {{ $selectedCustomer ? $customers->find($selectedCustomer)->name : 'Selecciona un cliente' }}
+                    {{ $selectedCustomer ? $customers->find($selectedCustomer)->name : 'Selecciona un cliente' }}
             </h2>
+            <div>
+                <button class="button-filter" wire:click="openModal">
+                    Tags
+                </button>
+            </div>
+            <!-- Modal -->
+            @if ($showModal)
+            <div class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                <div class="bg-white w-11/12 md:w-1/3 h-auto max-h-3/4 rounded-lg shadow-lg p-6 flex flex-col">
+                    <h2 class="text-xl font-bold mb-4">Asignar Etiquetas al Cliente</h2>
+                
+                    <!-- Lista de Etiquetas con Checkboxes, con scroll si son muchas -->
+                    <div class="flex-1 overflow-y-auto mb-4" style="max-height: 300px;">
+                        <ul class="space-y-2">
+                            @foreach($tags as $tag)
+                                <li class="py-2 px-4 bg-gray-100 rounded flex items-center">
+                                    <input type="checkbox" value="{{ $tag->id }}" wire:model="selectedTags" class="mr-2">
+                                    <span>{{ $tag->name_tag }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                
+                    <!-- Botones para guardar y cerrar, siempre visibles -->
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" class="button-filter" wire:click="closeModal">
+                            Cerrar
+                        </button>
+                        <button type="submit"class="button-filter" wire:click="saveTags">
+                            Guardar Etiquetas
+                        </button>
+                    </div>
+                </div>
+            </div>
+            @endif
         </div>
 
         @if($loadingMore)
@@ -57,7 +92,6 @@
                 <span class="loader">Cargando más mensajes...</span>
             </div>
         @endif
-
 
         <!-- Mensajes del Chat -->
         <div id="chat-messages" class="chat-messages flex-1 overflow-y-auto p-2" wire:scroll.debounce.250ms="onScroll">
