@@ -28,6 +28,12 @@ class ChatView extends Component
         ->groupBy('customer_id')
         ->get();
 
+    // Verificar si hay mensajes antes de proceder
+    if ($lastMessages->isEmpty()) {
+        $this->customers = collect(); // Crear una colección vacía para clientes
+        return; // Terminar aquí si no hay mensajes
+    }
+
     // Obtener los clientes y sus últimos mensajes
     $this->customers = Customer::with(['messages' => function ($query) {
         $query->orderBy('timestamp', 'desc')->limit(1); // Obtener solo el último mensaje
@@ -39,11 +45,7 @@ class ChatView extends Component
         return $lastMessage ? $lastMessage->last_timestamp : null; // Ordenar clientes por el último mensaje
     });
 
-    // Seleccionar el primer cliente como predeterminado
-    if ($this->customers->isNotEmpty()) {
-        $this->selectedCustomer = $this->customers->first()->id;
-        $this->loadMessages(); // Cargar mensajes del cliente seleccionado
-    }
+    $this->selectedCustomer = null; // Ningún cliente seleccionado inicialmente
 }
 
 public function formatMessageDate($timestamp)
@@ -68,12 +70,15 @@ public function formatMessageDate($timestamp)
 
     public function loadMessages()
     {
+        if ($this->selectedCustomer) {
         $this->messages = Message::where('customer_id', $this->selectedCustomer)
                         ->orderBy('timestamp', 'desc')
                         ->take(8)
                         ->get()
                         ->sortBy('timestamp');
-
+        } else {
+                $this->messages = collect(); // Si no hay cliente seleccionado, colección vacía
+            }
     }
 
     public function loadMoreMessages()
@@ -104,7 +109,7 @@ public function formatMessageDate($timestamp)
         $scrollPosition = request()->input('scrollPosition');
         
         // Si estamos cerca del principio, cargar más mensajes
-        if ($scrollPosition < 100) {
+        if ($scrollPosition < 8) {
             $this->loadMoreMessages();
         }
     }

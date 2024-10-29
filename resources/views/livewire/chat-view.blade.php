@@ -44,8 +44,10 @@
     <div class="chat-window flex-1 flex flex-col h-full bg-white overflow-hidden">
         <!-- Header del Chat -->
         <div class="chat-header flex items-center">
+            @if ($selectedCustomer)
             <div class="avatar flex items-center justify-center mr-3 overflow-hidden">
-                <span>{{ substr($customer->name, 0, 1) }}</span>
+                <span>{{ substr($customers->find($selectedCustomer)->name, 0, 1) }}</span>
+                <span>{{ substr($customers->find($selectedCustomer)->lastname, 0, 1) }}</span>
             </div>
             <h2 class="text-xl font-bold truncate">
                     {{ $selectedCustomer ? $customers->find($selectedCustomer)->name : 'Selecciona un cliente' }}
@@ -95,7 +97,7 @@
 
         <!-- Mensajes del Chat -->
         <div id="chat-messages" class="chat-messages flex-1 overflow-y-auto p-2" wire:scroll.debounce.250ms="onScroll">
-            @if ($messages->isNotEmpty())
+            @if ($selectedCustomer && $messages->isNotEmpty())
                 @php
                     $lastDate = null;
                 @endphp
@@ -122,13 +124,10 @@
                         </div>
                     </div>
                 @endforeach
-            @else
+                @elseif ($selectedCustomer)
                 <p class="text-gray-500">No hay mensajes para este cliente.</p>
-            @endif
-        
-            <!-- Indicar que se están cargando más mensajes -->
-            @if($loadingMore)
-                <div class="text-center p-2">Cargando más mensajes...</div>
+            @else
+                <p class="text-gray-500">Selecciona un cliente para ver los mensajes.</p>
             @endif
         </div>
         
