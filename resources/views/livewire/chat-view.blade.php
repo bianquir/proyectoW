@@ -39,7 +39,7 @@
         </div>
     </div>
 
-
+   
     <!-- Ventana de Chat -->
     <div class="chat-window flex-1 flex flex-col h-full bg-white overflow-hidden">
         <!-- Header del Chat -->
@@ -57,6 +57,12 @@
                     Tags
                 </button>
             </div>
+            @else
+            <!-- Fondo gris o mensaje de guía cuando no hay un cliente seleccionado -->
+            <div class="flex-1 text-center text-gray-500">
+               
+            </div>
+            @endif
             <!-- Modal -->
             @if ($showModal)
             <div class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
@@ -136,7 +142,7 @@
         <div class="chat-input flex items-center p-3 border-t border-gray-300 bg-gray-100">
             <input wire:model="newMessage" type="text" placeholder="Escribe un mensaje..."
                 class="flex-1 p-2 text-sm border rounded-full outline-none focus:ring focus:ring-blue-300">
-            <button wire:click="sendMessage({{$selectedCustomer}})">
+            <button wire:click="sendMessage">
                 Enviar
             </button>
         </div>
