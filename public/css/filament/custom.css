@@ -271,3 +271,15 @@ input[type="text"]:focus {
     text-align: right;  /* Para alinear a la derecha */
     color: #888;
   }
+
+
+.tag {
+    background-color: transparent; /* Para poder cambiar el color en el HTML */
+    color: white; /* Texto en blanco */
+    border-radius: 9999px; /* Bordes redondeados */
+    padding: 0.125rem 0.25rem; /* Reduce el padding para hacerlas más pequeñas */
+    font-size: 0.5rem; /* Tamaño de fuente más pequeño (8px) */
+    font-weight: 600; /* Peso de la fuente */
+    cursor: default; /* Mostrar como no seleccionable */
+    margin-right: 0.125rem; /* Espacio entre etiquetas */
+}

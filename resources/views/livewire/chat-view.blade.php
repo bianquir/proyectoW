@@ -21,22 +21,30 @@
             <button class="button-filter">Grupos</button>
         </div>
 
-        <!-- Lista de Clientes -->
-        <div class="chat-list space-y-1">
-            @foreach($customers as $customer)
-                <div class="chat-item flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-300 {{ $selectedCustomer === $customer->id ? 'selected' : '' }}"
-                wire:click="selectCustomer({{ $customer->id }})">
-                <!-- Avatar del cliente -->
-                    <div class="avatar flex items-center justify-center mr-4 overflow-hidden">
-                        <img src="{{ asset('img/CriticalDevs.png') }}" alt="avatar" class="w-full h-full rounded-full">
-                    </div>
-                <!-- Nombre del cliente-->
-                    <div class="flex-1 min-w-0">
-                        <h3 class="chat-name font-semibold truncate">{{ $customer->name.' '.$customer->lastname }}</h3>
-                    </div>
+<!-- Lista de Clientes -->
+<div class="chat-list space-y-1">
+    @foreach($customers as $customer)
+        <div class="chat-item flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-300 {{ $selectedCustomer === $customer->id ? 'selected' : '' }}"
+        wire:click="selectCustomer({{ $customer->id }})">
+            <!-- Avatar del cliente -->
+            <div class="avatar flex items-center justify-center mr-4 overflow-hidden">
+                <img src="{{ asset('img/CriticalDevs.png') }}" alt="avatar" class="w-full h-full rounded-full">
+            </div>
+            <!-- Nombre del cliente -->
+            <div class="flex-1 min-w-0">
+                <h3 class="chat-name font-semibold truncate">{{ $customer->name.' '.$customer->lastname }}</h3>
+                <!-- Mostrar etiquetas como botones -->
+                <div class="mt-1 flex flex-wrap">
+                    @foreach($customer->tags as $tag)
+                    <button style="background-color: {{ $tag->color }};" class="tag" disabled>
+                        {{ $tag->name_tag }}
+                    </button>
+                    @endforeach
                 </div>
-            @endforeach
+            </div>
         </div>
+    @endforeach
+</div>
     </div>
 
    

@@ -20,52 +20,53 @@ class ChatView extends Component
     public $showModal;
     public $tags= [];
     public $selectedTags = []; 
+    public $customer;
 
     public function mount()
-{
-    // Obtener el último mensaje de cada cliente
-    $lastMessages = Message::select('customer_id', DB::raw('MAX(timestamp) as last_timestamp'))
-        ->groupBy('customer_id')
-        ->get();
-
-    // Verificar si hay mensajes antes de proceder
-    if ($lastMessages->isEmpty()) {
-        $this->customers = collect(); // Crear una colección vacía para clientes
-        return; // Terminar aquí si no hay mensajes
+    {
+        // Obtener el último mensaje de cada cliente
+        $lastMessages = Message::select('customer_id', DB::raw('MAX(timestamp) as last_timestamp'))
+            ->groupBy('customer_id')
+            ->get();
+        
+        // Verificar si hay mensajes antes de proceder
+        if ($lastMessages->isEmpty()) {
+            $this->customers = collect(); // Crear una colección vacía para clientes
+            return; // Terminar aquí si no hay mensajes
+        }
+    
+        // Obtener los clientes y sus últimos mensajes
+        $this->customers = Customer::with(['messages' => function ($query) {
+            $query->orderBy('timestamp', 'desc')->limit(1); // Obtener solo el último mensaje
+        }, 'tags'])
+        ->whereIn('id', $lastMessages->pluck('customer_id')) // Filtrar solo los clientes que tienen mensajes
+        ->get()
+        ->sortByDesc(function ($customer) use ($lastMessages) {
+            $lastMessage = $lastMessages->firstWhere('customer_id', $customer->id);
+            return $lastMessage ? $lastMessage->last_timestamp : null; // Ordenar clientes por el último mensaje
+        });
+    
+        $this->selectedCustomer = null; // Ningún cliente seleccionado inicialmente
     }
 
-    // Obtener los clientes y sus últimos mensajes
-    $this->customers = Customer::with(['messages' => function ($query) {
-        $query->orderBy('timestamp', 'desc')->limit(1); // Obtener solo el último mensaje
-    }])
-    ->whereIn('id', $lastMessages->pluck('customer_id')) // Filtrar solo los clientes que tienen mensajes
-    ->get()
-    ->sortByDesc(function ($customer) use ($lastMessages) {
-        $lastMessage = $lastMessages->firstWhere('customer_id', $customer->id);
-        return $lastMessage ? $lastMessage->last_timestamp : null; // Ordenar clientes por el último mensaje
-    });
+    public function formatMessageDate($timestamp)
+    {
+        $messageDate = Carbon::parse($timestamp);
+        $now = Carbon::now();
 
-    $this->selectedCustomer = null; // Ningún cliente seleccionado inicialmente
-}
+        // Si es hoy
+        if ($messageDate->isToday()) {
+            return 'Today';
+        }
 
-public function formatMessageDate($timestamp)
-{
-    $messageDate = Carbon::parse($timestamp);
-    $now = Carbon::now();
+        // Si es en esta misma semana
+        if ($messageDate->isSameWeek($now)) {
+            return $messageDate->translatedFormat('l'); // Lunes, Martes, etc.
+        }
 
-    // Si es hoy
-    if ($messageDate->isToday()) {
-        return 'Today';
+        // Si es más antiguo que una semana, mostrar la fecha completa
+        return $messageDate->translatedFormat('d M Y');
     }
-
-    // Si es en esta misma semana
-    if ($messageDate->isSameWeek($now)) {
-        return $messageDate->translatedFormat('l'); // Lunes, Martes, etc.
-    }
-
-    // Si es más antiguo que una semana, mostrar la fecha completa
-    return $messageDate->translatedFormat('d M Y');
-}
 
 
     public function loadMessages()
@@ -120,6 +121,7 @@ public function formatMessageDate($timestamp)
         // Cambia el cliente seleccionado y recarga los mensajes
         $this->selectedCustomer = $customerId;
         $this->loadMessages();
+        $this->loadCustomerTags();
     }
 
     public function sendMessage($customerId)
@@ -203,6 +205,12 @@ public function formatMessageDate($timestamp)
 
         // Establecer el mensaje de éxito en la sesión
         session()->flash('success', 'Etiquetas asignadas con éxito.');
+    }
+
+    public function loadCustomerTags()
+    {
+        // Cargar el cliente seleccionado con sus etiquetas
+        $this->customer = Customer::with('tags')->find($this->selectedCustomer);
     }
 
     public function render()
