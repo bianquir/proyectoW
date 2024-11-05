@@ -111,7 +111,7 @@
             <!-- Modal -->
             @if ($showModal)
             <div class="modal-overlay-small" wire:click="closeModal">
-                <div class="modal-content-small">
+                <div class="modal-content-small" wire:click.stop>
                     <div class="flex items-center mb-4">
                         <h2 class="text-xl font-bold mr-2">Asignar etiquetas</h2>
                         <button wire:click="openCreateTagModal" class="button-tag">
