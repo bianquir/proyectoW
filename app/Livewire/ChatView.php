@@ -128,60 +128,56 @@ class ChatView extends Component
         $this->loadCustomerTags(); // Load tags associated with the selected customer
     }
 
-    public function sendMessage($customerId)
-    {
-        $customer = Customer::find($customerId);
+    public function sendMessage()
+{
+    $customer = Customer::find($this->selectedCustomer); // Use $this->selectedCustomer
 
+    $whatsapp_api_url = env('WHATSAPP_API_URL');
+    $whatsapp_api_version = env('WHATSAPP_API_VERSION');
+    $whatsapp_api_number_id = env('WHATSAPP_PHONE_NUMBER_ID');
+    $access_token = env('WHATSAPP_ACCESS_TOKEN');
 
-        $whatsapp_api_url = env('WHATSAPP_API_URL');
-        $whatsapp_api_version = env('WHATSAPP_API_VERSION');
-        $whatsapp_api_number_id = env('WHATSAPP_PHONE_NUMBER_ID');
-        $access_token = env('WHATSAPP_ACCESS_TOKEN');
+    $whatsapp_full_url = $whatsapp_api_url . $whatsapp_api_version . $whatsapp_api_number_id . '/messages'; 
 
-        $whatsapp_full_url = $whatsapp_api_url . '/' . $whatsapp_api_version . '/' . $whatsapp_api_number_id . '/messages'; 
+    $data = [
+        'messaging_product' => 'whatsapp',
+        'to' => $customer->wa_id,
+        'type' => 'text',
+        'text' => [
+            'body' => $this->newMessage,
+        ],
+    ];
 
-        $data = [
-            'messaging_product' => 'whatsapp',
-            'to' => $customer->wa_id,
-            'type' => 'text',
-            'text' => [
-                'body' => $this->newMessage,
-            ],
-        ];
+    $response = Http::withToken($access_token)->post($whatsapp_full_url, $data);
 
-
-        $response = Http::withToken($access_token)->post($whatsapp_full_url, $data);
-
-
-        if ($response->successful()) {
-            // Limpiar el formulario después de enviar
-            $this->newMessage = '';
-
-            $this->loadMessages();
-        } else {
-            // Mostrar mensaje de error
-            session()->flash('error', 'Error al enviar el mensaje.');
-        }
-    
-
-        // Crear un nuevo mensaje para el cliente seleccionado
-        $message = Message::create([
-            'customer_id' => $this->selectedCustomer,
-            'message' => $this->newMessage,
-            'message_type' => 'text',
-            'direction' => 'outbound',
-            'status' => 'sent',
-            'timestamp' => now(),
-        ]);
-
-        // Añadir el nuevo mensaje a la lista
-        $this->messages->prepend($message);
-
-        // Limpiar el campo de nuevo mensaje
+    if ($response->successful()) {
+        // Clear the message input
         $this->newMessage = '';
-        // $this->dispatchBrowserEvent('message-sent');
+
         $this->loadMessages();
+    } else {
+        // Show error message
+        session()->flash('error', 'Error al enviar el mensaje.');
     }
+
+    // Save the message locally
+    $message = Message::create([
+        'customer_id' => $this->selectedCustomer,
+        'message' => $this->newMessage,
+        'message_type' => 'text',
+        'direction' => 'outbound',
+        'status' => 'sent',
+        'timestamp' => now(),
+    ]);
+
+    // Add the new message to the list
+    $this->messages->prepend($message);
+
+    // Clear the new message field
+    $this->newMessage = '';
+    $this->loadMessages();
+}
+
 
     //////////////////////////FUNCIONES PARA ASIGNAR LAS ETIQUETAS A LOS CLIENTES///////////////////////////
     public function openModal()

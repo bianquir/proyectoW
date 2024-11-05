@@ -186,9 +186,9 @@
         <div class="chat-input flex items-center p-3 border-t border-gray-300 bg-gray-100">
             <input wire:model="newMessage" type="text" placeholder="Escribe un mensaje..."
                 class="flex-1 p-2 text-sm border rounded-full outline-none focus:ring focus:ring-blue-300">
-            <button wire:click="sendMessage">
-                Enviar
-            </button>
+                <button wire:click="sendMessage({{ $selectedCustomer }})">
+                    Enviar
+                </button>
         </div>
         @endif
     </div>

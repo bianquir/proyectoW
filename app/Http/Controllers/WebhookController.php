@@ -246,7 +246,7 @@ private function handleContactMessage($messageData, &$message_body)
     {
 
         $whatsapp_token = env('WHATSAPP_ACCESS_TOKEN');
-        
+       
         $disk = match($mediaType) {
             'image' => 'media_image',
             'video' => 'media_video',
@@ -265,7 +265,8 @@ private function handleContactMessage($messageData, &$message_body)
             // Obtiene el contenido del archivo desde la URL
             $mediaDonwloadUrl = $this->getMediaUrlFromWhatsApp($mediaUrl);
 
-            if (empty($mediaUrl)) {
+           
+            if (empty($mediaDonwloadUrl)) {
                 Log::error('No se pudo obtener la URL del archivo desde WhatsApp.');
                 return null;
             }
@@ -293,7 +294,6 @@ private function handleContactMessage($messageData, &$message_body)
         $whatsapp_version = env('WHATSAPP_API_VERSION');
         $whatsapp_token = env('WHATSAPP_ACCESS_TOKEN');
         $whatsappUrlFull = $whatsappUrl . $whatsapp_version . $mediaId;
-        
         try {
             $response = Http::withToken($whatsapp_token)->get($whatsappUrlFull);
             if ($response->successful()) {
