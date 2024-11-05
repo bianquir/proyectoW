@@ -27,8 +27,10 @@
         <div class="chat-item flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-300 {{ $selectedCustomer === $customer->id ? 'selected' : '' }}"
         wire:click="selectCustomer({{ $customer->id }})">
             <!-- Avatar del cliente -->
-            <div class="avatar flex items-center justify-center mr-4 overflow-hidden">
-                <img src="{{ asset('img/CriticalDevs.png') }}" alt="avatar" class="w-full h-full rounded-full">
+            <div class="avatar  mr-4 {{ 'avatar-' . ($customer->id % 5) }}">                
+                <span class="text-white font-bold text-lg">
+                    {{ substr($customer->name, 0, 1) }}{{ substr($customer->lastname, 0, 1) }}
+                </span>
             </div>
             <!-- Nombre del cliente -->
             <div class="flex-1 min-w-0">
@@ -50,19 +52,18 @@
     </div>
 
  @if ($showTagModal && $selectedTag)
-    <!-- Fondo borroso -->
-    <div class="blur-background"></div>
     
-    <!-- Modal con animación de aparición suave -->
-    <div class="fixed inset-0 flex items-center justify-center z-50">
-        <div class="modal-content show bg-white w-11/12 md:w-1/3 h-auto max-h-3/4 rounded-lg shadow-lg p-6 flex flex-col">
-            <h2 class="text-xl font-bold mb-4">Detalles de la Etiqueta</h2>
+    <!-- Modal etiquetas -->
+    <div class="modal-overlay">
+        <!-- Contenido del modal -->
+            <div class="modal-content">
+                <h2>Detalles de la Etiqueta</h2>
 
             <!-- Mostrar detalles de la etiqueta -->
             <div class="flex flex-col mb-4">
                 <p><strong>Nombre:</strong> {{ $selectedTag->name_tag }}</p>
                 <p><strong>Color:</strong> 
-                    <span style="background-color: {{ $selectedTag->color }}; padding: 4px 8px; border-radius: 4px;">
+                    <span class="tag-color" style="background-color: {{ $selectedTag->color }};">
                         {{ $selectedTag->color }}
                     </span>
                 </p>
@@ -71,7 +72,7 @@
 
             <!-- Botones para eliminar la etiqueta del cliente o cerrar el modal -->
             <div class="flex justify-end space-x-4">
-                <button type="button" class="button-filter" wire:click="$set('showTagModal', false)">
+                <button type="button" class="button-filter" onclick="closeModal()" wire:click="$set('showTagModal', false)">
                     Cerrar
                 </button>
                 <button type="button" class="button-filter" wire:click="removeCustomerTag">
@@ -89,15 +90,15 @@
         <!-- Header del Chat -->
         <div class="chat-header flex items-center">
             @if ($selectedCustomer)
-            <div class="avatar flex items-center justify-center mr-3 overflow-hidden">
+            <div class="avatar  mr-3 font-bold {{ 'avatar-' . ($selectedCustomer % 5) }}" >
                 <span>{{ substr($customers->find($selectedCustomer)->name, 0, 1) }}</span>
                 <span>{{ substr($customers->find($selectedCustomer)->lastname, 0, 1) }}</span>
             </div>
             <h2 class="text-xl font-bold truncate">
                     {{ $selectedCustomer ? $customers->find($selectedCustomer)->name : 'Selecciona un cliente' }}
             </h2>
-            <div class="ml-auto mr-4"> <!-- Añadido mr-4 para más espacio a la derecha -->
-                <button class="button-filter" wire:click="openModal">
+            <div class="ml-auto mr-4">
+                <button class="button-tag" wire:click="openModal">
                     <x-heroicon-s-tag class="h-6 w-6" />
                 </button>
             </div>
@@ -109,9 +110,14 @@
             @endif
             <!-- Modal -->
             @if ($showModal)
-            <div class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                <div class="bg-white w-11/12 md:w-1/3 h-auto max-h-3/4 rounded-lg shadow-lg p-6 flex flex-col">
-                    <h2 class="text-xl font-bold mb-4">Asignar Etiquetas al Cliente</h2>
+            <div class="modal-overlay-small" wire:click="closeModal">
+                <div class="modal-content-small">
+                    <div class="flex items-center mb-4">
+                        <h2 class="text-xl font-bold mr-2">Asignar etiquetas</h2>
+                        <button wire:click="openCreateTagModal" class="button-tag">
+                            <x-heroicon-m-plus-circle class="h-6 w-6" />
+                        </button>
+                    </div>
                 
                     <!-- Lista de Etiquetas con Checkboxes, con scroll si son muchas -->
                     <div class="flex-1 overflow-y-auto mb-4" style="max-height: 300px;">
@@ -131,7 +137,7 @@
                             Cerrar
                         </button>
                         <button type="submit"class="button-filter" wire:click="saveTags">
-                            Guardar Etiquetas
+                            Guardar
                         </button>
                     </div>
                 </div>
@@ -143,6 +149,40 @@
             <div class="text-center p-2 mb-2">
                 <span class="loader">Cargando más mensajes...</span>
             </div>
+        @endif
+
+        @if ($createTagModal)
+        <div class="modal-overlay-small" wire:click="closeCreateTagModal">
+            <div class="modal-content-small" wire:click.stop>
+                <h2 class="text-xl font-bold mb-4">Crear nueva etiqueta</h2>
+                
+                <!-- Formulario para crear una nueva etiqueta -->
+                <div>
+                    <form wire:submit.prevent="createTag">
+                        <div class="mb-4">
+                            <label for="name_tag" class="block text-sm font-medium text-gray-700">Nombre de Tag</label>
+                            <input type="text" wire:model.defer="newTag.name_tag" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
+                            <input type="text" wire:model.defer="newTag.description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        </div>
+                        <div class="mb-4">
+                            <label for="color" class="block text-sm font-medium text-gray-700">Color</label>
+                            <input type="color" wire:model.defer="newTag.color" class="mt-1 block w-full border-gray-300 rounded-md">
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="button" class="button-filter" wire:click="closeCreateTagModal">
+                                Cancelar
+                            </button>
+                            <button type="submit" class="button-filter ml-2">
+                                Crear
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         @endif
 
         <!-- Mensajes del Chat -->
@@ -177,7 +217,11 @@
                 @elseif ($selectedCustomer)
                 <p class="text-gray-500">No hay mensajes para este cliente.</p>
             @else
-                <p class="text-gray-500">Selecciona un cliente para ver los mensajes.</p>
+            <div class="flex-1 text-center text-gray-500 flex flex-col items-center justify-center p-4 bg-gray-50 rounded-lg shadow-lg">
+                <img src="{{ asset('img/CriticalDevs.png') }}" alt="Sin chat seleccionado" class="logo-inicio"> <!-- Ajusta la ruta y tamaño -->
+                <h2 class="text-lg font-semibold">¡Hola!</h2>
+                <p class="mt-4 text-sm">No has seleccionado ningún chat aún. Por favor, elige un cliente para comenzar la conversación.</p>
+            </div>
             @endif
         </div>
         

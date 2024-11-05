@@ -28,3 +28,21 @@ document.addEventListener('livewire:load', function () {
         chatMessages.scrollTop = chatMessages.scrollHeight; // Desplazar al fondo
     });
 });
+
+function closeModal() {
+    document.querySelector('.modal-overlay').classList.add('close');
+    document.querySelector('.modal-content').classList.add('close');
+
+    setTimeout(() => {
+        document.querySelector('.modal-overlay').style.display = 'none';
+    }, 500); // Duración de la animación de salida
+}
+
+function openModal() {
+    const overlay = document.querySelector('.modal-overlay');
+    overlay.style.display = 'flex';
+
+    // Remueve la clase "close" si se había añadido antes
+    overlay.classList.remove('close');
+    document.querySelector('.modal-content').classList.remove('close');
+}

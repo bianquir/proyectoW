@@ -133,9 +133,20 @@ section {
     height: 50px;
     border-radius: 50%;
     margin-right: 12px ;
-    margin-left: 12px;
+    margin-left: 6px;
     background-color: #ccc; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
 }
+
+.avatar-0 {background-color: #3f80b4;}
+.avatar-1 {background-color: #8bd89b;}
+.avatar-2 {background-color: #f33da1;}
+.avatar-3 {background-color: #b253cc;}
+.avatar-4 {background-color: #f87224;}
 
 .chat-name {
     font-size: 12px; 
@@ -243,6 +254,22 @@ input[type="text"]:focus {
     outline: none;
 }
 
+.button-tag{
+    color:rgba(33, 165, 165, 0.753) !important;
+    font-size: 12px;
+    font-weight: 30;
+    padding: 0.5em 1.2em;
+    background: transparent;
+    transition: all 1s ease;
+    position: relative;
+    margin-left: 5px; /* Ajusta este valor para el espaciado */
+    margin-right: 10px; 
+}
+
+.button-tag:hover {
+    color: rgb(21, 114, 114) !important;
+  }
+
 .button-filter {
     color: #ffffff !important;
     font-size: 12px;
@@ -257,6 +284,7 @@ input[type="text"]:focus {
     margin-left: 5px; /* Ajusta este valor para el espaciado */
     margin-right: 10px; /* Aumenta este valor para más espaciado */
 }
+
 .button-filter:hover {
         background: rgb(21, 114, 114);
         color: #fff !important;
@@ -273,32 +301,97 @@ input[type="text"]:focus {
 
 
 .tag {
-    background-color: transparent; /* Para poder cambiar el color en el HTML */
-    color: white; /* Texto en blanco */
-    border-radius: 9999px; /* Bordes redondeados */
-    padding: 0.125rem 0.25rem; /* Reduce el padding para hacerlas más pequeñas */
-    font-size: 10px; /* Tamaño de fuente más pequeño (8px) */
-    font-weight: 600; /* Peso de la fuente */
-    cursor: default; /* Mostrar como no seleccionable */
-    margin-right: 0.125rem; /* Espacio entre etiquetas */
+    background-color: transparent; 
+    color: white; 
+    border-radius: 9999px; 
+    padding: 0.125rem 0.25rem; 
+    font-size: 10px; 
+    font-weight: 600; 
+    transition: all 0.3s ease; 
+    cursor: pointer; 
+    margin-right: 0.125rem; 
 }
 
-.blur-background {
+.tag:hover {
+    background-color: #e0e0e0;
+    color: #ffffff;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(228, 228, 228, 0.2);
+}
+
+/* Estilo para el fondo de la página cuando el modal está abierto */
+.modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
-    backdrop-filter: blur(8px); /* Aplica el efecto de desenfoque */
-    z-index: 40; /* Asegúrate de que esté debajo del modal pero por encima del resto */
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    backdrop-filter: blur(2px); /* Desenfoque del fondo */
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeIn 0.2s forwards; /* Animación de aparición */
+}
+
+/* Estilo del contenido del modal */
+.modal-content {
+    background-color: #fff;
+    width: 90%;
+    max-width: 500px;
+    max-height: 75vh;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: scale(0.95);
+    animation: modalIn 0.2s forwards; /* Animación de entrada */
+}
+
+/* Animaciones para entrada y salida del modal*/
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes modalOut {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.95); }
+}
+
+.modal-overlay.close {
+    animation: fadeOut 0.5s forwards;
+}
+
+.modal-content.close {
+    animation: modalOut 0.5s forwards;
+}
+
+/* Encabezado del modal */
+.modal-content h2 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 16px;
 }
 
 .sidebar-chat {
     position: relative; /* Asegúrate de que esto se mantenga dentro de su contexto */
     z-index: 30; /* Mantiene la barra de búsqueda y los botones por encima del fondo desenfocado */
 }
-
 
 .customer-data {
     width: 30%; /* Ajusta según lo que necesites */
@@ -312,4 +405,80 @@ input[type="text"]:focus {
 
 .customer-data.visible {
     display: block; /* Muestra cuando está activo */
+}
+
+.logo-inicio{
+    width: 80px; /* Ajusta el tamaño según sea necesario */
+    height: 80px; /* Mantén el mismo tamaño para que sea redonda */
+    border-radius: 50%; /* Esto hace que la imagen sea redonda */
+    object-fit: cover; /* Esto asegura que la imagen cubra el área sin deformarse */
+    border: 2px solid rgb(21, 114, 114);; /* Agrega un borde si deseas resaltar la imagen */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Opcional: agrega una sombra suave */
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+/* Estilo para el fondo de la página cuando el modal está abierto sin desenfoque */
+.modal-overlay-small {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 50;
+    display: flex;
+    align-items: flex-start; /* Alinear al principio del eje vertical */
+    justify-content: flex-end; /* Alinear al final del eje horizontal */
+    opacity: 0;
+    animation: fadeIn 0.2s forwards; /* Animación de aparición */
+}
+
+/* Estilo del contenido del nuevo modal */
+.modal-content-small {
+    background-color: #fff;
+    width: 300px; /* Ancho fijo */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: scale(0.95);
+    animation: modalIn 0.2s forwards; /* Animación de entrada */
+}
+
+/* Animaciones para entrada y salida del modal*/
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes modalOut {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.95); }
+}
+
+.modal-overlay-small.close {
+    animation: fadeOut 0.5s forwards;
+}
+
+.modal-content-small.close {
+    animation: modalOut 0.5s forwards;
+}
+
+/* Encabezado del modal */
+.modal-content-small h2 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 16px;
 }

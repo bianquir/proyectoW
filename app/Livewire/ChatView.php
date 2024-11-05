@@ -25,7 +25,14 @@ class ChatView extends Component
     public $selectedTag = null;
     public $selectedCustomerForTag = null; // Cliente asociado a la etiqueta seleccionada
     public $showConfirmModal = false;
-
+    public $showCreateModal = false;
+    public $createTagModal = false;
+    public $newTag = [
+        'name_tag' => '',
+        'description' => '',
+        'color' => ''
+    ];
+    
     public function mount()
     {
         // Obtener el último mensaje de cada cliente
@@ -252,8 +259,40 @@ class ChatView extends Component
         }
     }
 
+
+        public function openCreateTagModal()
+        {
+            $this->createTagModal = true;
+        }
+
+        public function closeCreateTagModal()
+        {
+            $this->createTagModal = false;
+        }
+
+        public function createTag()
+        {
+            //VALIDAR LOS DATOSSSSSSSSSS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            Tag::create([
+                'name_tag' => $this->newTag['name_tag'],
+                'description' => $this->newTag['description'],
+                'color' => $this->newTag['color'],
+            ]);
+
+            // Reiniciar los campos del formulario
+            $this->reset('newTag');
+
+            // Cerrar el modal
+            $this->createTagModal = false;
+
+        }
+        
+
+
     public function render()
     {
+
         return view('livewire.chat-view');
     }
 }
