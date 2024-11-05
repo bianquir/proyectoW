@@ -243,21 +243,20 @@ input[type="text"]:focus {
     outline: none;
 }
 
-.button-filter{
-        color: #ffffff !important;
-        font-size: 12px;
-        font-weight: 30;
-        padding: 0.5em 1.2em;
-        background: rgb(141, 194, 194);
-        border: 2px solid;
-        border-radius: 25px;
-        border-color: rgba(33, 165, 165, 0.753);
-        transition: all 1s ease;
-        position: relative;
-        margin-left: 5px;
-        margin-right: 5px;
-        
-      }
+.button-filter {
+    color: #ffffff !important;
+    font-size: 12px;
+    font-weight: 30;
+    padding: 0.5em 1.2em;
+    background: rgb(141, 194, 194);
+    border: 2px solid;
+    border-radius: 25px;
+    border-color: rgba(33, 165, 165, 0.753);
+    transition: all 1s ease;
+    position: relative;
+    margin-left: 5px; /* Ajusta este valor para el espaciado */
+    margin-right: 10px; /* Aumenta este valor para más espaciado */
+}
 .button-filter:hover {
         background: rgb(21, 114, 114);
         color: #fff !important;
@@ -282,4 +281,35 @@ input[type="text"]:focus {
     font-weight: 600; /* Peso de la fuente */
     cursor: default; /* Mostrar como no seleccionable */
     margin-right: 0.125rem; /* Espacio entre etiquetas */
+}
+
+.blur-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+    backdrop-filter: blur(8px); /* Aplica el efecto de desenfoque */
+    z-index: 40; /* Asegúrate de que esté debajo del modal pero por encima del resto */
+}
+
+.sidebar-chat {
+    position: relative; /* Asegúrate de que esto se mantenga dentro de su contexto */
+    z-index: 30; /* Mantiene la barra de búsqueda y los botones por encima del fondo desenfocado */
+}
+
+
+.customer-data {
+    width: 30%; /* Ajusta según lo que necesites */
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-left: 1px solid #ddd; /* Línea divisoria */
+    height: 100%; /* Para que ocupe todo el alto disponible */
+    overflow-y: auto; /* Habilita el scroll si hay mucho contenido */
+    display: none; /* Oculto por defecto */
+}
+
+.customer-data.visible {
+    display: block; /* Muestra cuando está activo */
 }

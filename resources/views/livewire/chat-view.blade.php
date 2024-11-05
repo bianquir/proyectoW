@@ -36,9 +36,11 @@
                 <!-- Mostrar etiquetas como botones -->
                 <div class="mt-1 flex flex-wrap">
                     @foreach($customer->tags as $tag)
-                    <button style="background-color: {{ $tag->color }};" class="tag" disabled>
-                        {{ $tag->name_tag }}
-                    </button>
+                        <button style="background-color: {{ $tag->color }};" 
+                                class="tag" 
+                                wire:click="showTagDetails({{ $customer->id }}, {{ $tag->id }})">
+                            {{ $tag->name_tag }}
+                        </button>
                     @endforeach
                 </div>
             </div>
@@ -47,7 +49,41 @@
 </div>
     </div>
 
-   
+ @if ($showTagModal && $selectedTag)
+    <!-- Fondo borroso -->
+    <div class="blur-background"></div>
+    
+    <!-- Modal con animación de aparición suave -->
+    <div class="fixed inset-0 flex items-center justify-center z-50">
+        <div class="modal-content show bg-white w-11/12 md:w-1/3 h-auto max-h-3/4 rounded-lg shadow-lg p-6 flex flex-col">
+            <h2 class="text-xl font-bold mb-4">Detalles de la Etiqueta</h2>
+
+            <!-- Mostrar detalles de la etiqueta -->
+            <div class="flex flex-col mb-4">
+                <p><strong>Nombre:</strong> {{ $selectedTag->name_tag }}</p>
+                <p><strong>Color:</strong> 
+                    <span style="background-color: {{ $selectedTag->color }}; padding: 4px 8px; border-radius: 4px;">
+                        {{ $selectedTag->color }}
+                    </span>
+                </p>
+                <p><strong>Descripción:</strong> {{ $selectedTag->description }}</p>
+            </div>
+
+            <!-- Botones para eliminar la etiqueta del cliente o cerrar el modal -->
+            <div class="flex justify-end space-x-4">
+                <button type="button" class="button-filter" wire:click="$set('showTagModal', false)">
+                    Cerrar
+                </button>
+                <button type="button" class="button-filter" wire:click="removeCustomerTag">
+                    Eliminar Etiqueta
+                </button>
+            </div>
+        </div>
+    </div>
+@endif
+
+
+
     <!-- Ventana de Chat -->
     <div class="chat-window flex-1 flex flex-col h-full bg-white overflow-hidden">
         <!-- Header del Chat -->
@@ -60,9 +96,9 @@
             <h2 class="text-xl font-bold truncate">
                     {{ $selectedCustomer ? $customers->find($selectedCustomer)->name : 'Selecciona un cliente' }}
             </h2>
-            <div>
+            <div class="ml-auto mr-4"> <!-- Añadido mr-4 para más espacio a la derecha -->
                 <button class="button-filter" wire:click="openModal">
-                    Tags
+                    <x-heroicon-s-tag class="h-6 w-6" />
                 </button>
             </div>
             @else

@@ -21,6 +21,10 @@ class ChatView extends Component
     public $tags= [];
     public $selectedTags = []; 
     public $customer;
+    public $showTagModal = false;
+    public $selectedTag = null;
+    public $selectedCustomerForTag = null; // Cliente asociado a la etiqueta seleccionada
+    public $showConfirmModal = false;
 
     public function mount()
     {
@@ -72,14 +76,14 @@ class ChatView extends Component
     public function loadMessages()
     {
         if ($this->selectedCustomer) {
-        $this->messages = Message::where('customer_id', $this->selectedCustomer)
-                        ->orderBy('timestamp', 'desc')
-                        ->take(8)
-                        ->get()
-                        ->sortBy('timestamp');
+            $this->messages = Message::where('customer_id', $this->selectedCustomer)
+                            ->orderBy('timestamp', 'desc')
+                            ->take(8)
+                            ->get()
+                            ->sortBy('timestamp');
         } else {
-                $this->messages = collect(); // Si no hay cliente seleccionado, colección vacía
-            }
+            $this->messages = collect(); 
+        }
     }
 
     public function loadMoreMessages()
@@ -120,8 +124,8 @@ class ChatView extends Component
     {
         // Cambia el cliente seleccionado y recarga los mensajes
         $this->selectedCustomer = $customerId;
-        $this->loadMessages();
-        $this->loadCustomerTags();
+        $this->loadMessages(); // This method should load messages for the selected customer
+        $this->loadCustomerTags(); // Load tags associated with the selected customer
     }
 
     public function sendMessage($customerId)
@@ -179,6 +183,7 @@ class ChatView extends Component
         $this->loadMessages();
     }
 
+    //////////////////////////FUNCIONES PARA ASIGNAR LAS ETIQUETAS A LOS CLIENTES///////////////////////////
     public function openModal()
     {
         $this->tags = Tag::all();  // Cargar todas las etiquetas
@@ -193,12 +198,10 @@ class ChatView extends Component
 
     public function saveTags()
     {
-        // Obtener el cliente seleccionado
         $customer = Customer::find($this->selectedCustomer);
 
-        // Asignar las etiquetas seleccionadas al cliente
-        // El método sync manejará automáticamente los timestamps
-        $customer->tags()->sync($this->selectedTags);
+        // Agregar cada etiqueta seleccionada individualmente, evitando duplicados
+        $customer->tags()->syncWithoutDetaching($this->selectedTags);
 
         // Cerrar el modal después de guardar
         $this->showModal = false;
@@ -211,6 +214,46 @@ class ChatView extends Component
     {
         // Cargar el cliente seleccionado con sus etiquetas
         $this->customer = Customer::with('tags')->find($this->selectedCustomer);
+    }
+
+
+    ///////////////FUNCIONES PARA PODER PRESIONAR LAS ETIQUETAS QUE TIENEN LOS CLIENTES Y PODER ELIMINARLAS/////////////////
+    // Mostrar los detalles de la etiqueta sin seleccionar el cliente
+    public function showTagDetails($customerId, $tagId)
+    {
+        $customer = Customer::find($customerId);
+        if ($customer) {
+            $this->selectedTag = $customer->tags()->find($tagId);
+            $this->selectedCustomerForTag = $customerId;
+        
+            if ($this->selectedTag) {
+                $this->showTagModal = true; // Muestra el modal de detalles de la etiqueta
+            } else {
+                session()->flash('error', 'Etiqueta no encontrada.');
+            }
+        } else {
+            session()->flash('error', 'Cliente no encontrado.');
+        }
+    }
+    
+    // Eliminar la etiqueta específica del cliente
+    public function removeCustomerTag()
+    {
+        if ($this->selectedCustomerForTag && $this->selectedTag) {
+            $customer = Customer::find($this->selectedCustomerForTag);
+        
+            if ($customer) {
+                // Desvincular la etiqueta del cliente
+                $customer->tags()->detach($this->selectedTag->id);
+            
+                // Ocultar el modal y mostrar un mensaje de éxito
+                $this->showTagModal = false;
+                $this->showConfirmModal = false; // Ocultar el modal de confirmación
+                session()->flash('success', 'Etiqueta removida con éxito.');
+            } else {
+                session()->flash('error', 'Cliente no encontrado.');
+            }
+        }
     }
 
     public function render()
