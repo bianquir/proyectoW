@@ -32,6 +32,7 @@ class ChatView extends Component
         'description' => '',
         'color' => ''
     ];
+    public $showDataModal = false;
     
     public function mount()
     {
@@ -64,19 +65,19 @@ class ChatView extends Component
     {
         $messageDate = Carbon::parse($timestamp);
         $now = Carbon::now();
-
+    
         // Si es hoy
         if ($messageDate->isToday()) {
-            return 'Today';
+            return 'Hoy';
         }
-
+    
         // Si es en esta misma semana
         if ($messageDate->isSameWeek($now)) {
             return $messageDate->translatedFormat('l'); // Lunes, Martes, etc.
         }
-
+    
         // Si es más antiguo que una semana, mostrar la fecha completa
-        return $messageDate->translatedFormat('d M Y');
+        return $messageDate->translatedFormat('d M Y'); // d M Y ya estará en español
     }
 
 
@@ -259,36 +260,52 @@ class ChatView extends Component
         }
     }
 
+    ///modal y logica para crear tags
+    public function openCreateTagModal()
+    {
+        $this->createTagModal = true;
+    }
+    public function closeCreateTagModal()
+    {
+        $this->createTagModal = false;
+    }
 
-        public function openCreateTagModal()
-        {
-            $this->createTagModal = true;
+    public function createTag()
+    {
+        //VALIDAR LOS DATOSSSSSSSSSS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        $tag = Tag::create([
+            'name_tag' => $this->newTag['name_tag'],
+            'description' => $this->newTag['description'],
+            'color' => $this->newTag['color'],
+        ]);
+    
+        // Obtener al cliente seleccionado
+        $customer = Customer::find($this->selectedCustomer);
+    
+        if ($customer) {
+            // Asignar la nueva etiqueta al cliente
+            $customer->tags()->attach($tag->id); // Aquí se asocia la etiqueta al cliente
         }
-
-        public function closeCreateTagModal()
-        {
-            $this->createTagModal = false;
-        }
-
-        public function createTag()
-        {
-            //VALIDAR LOS DATOSSSSSSSSSS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-            Tag::create([
-                'name_tag' => $this->newTag['name_tag'],
-                'description' => $this->newTag['description'],
-                'color' => $this->newTag['color'],
-            ]);
-
-            // Reiniciar los campos del formulario
-            $this->reset('newTag');
-
-            // Cerrar el modal
-            $this->createTagModal = false;
-
-        }
-        
-
+    
+        // Reiniciar los campos del formulario
+        $this->reset('newTag');
+    
+        // Cerrar el modal de creación de etiqueta
+        $this->createTagModal = false;
+    
+        // Mostrar mensaje de éxito
+        session()->flash('success', 'Etiqueta creada y asignada al cliente con éxito.');
+    }
+    
+    ///modal para abrir info del contacto
+    public function openDataModal()
+    {
+        $this->showDataModal = true;
+    }
+    public function closeDataModal()
+    {
+        $this->showDataModal = false;
+    }
 
     public function render()
     {

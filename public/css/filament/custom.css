@@ -39,9 +39,7 @@ section {
     .chat-input {
         padding: 10px;
     }
-}
 
-@media (max-width: 768px) {
     .chat-item {
         padding: 6px 12px;
         font-size: 10px;
@@ -57,7 +55,6 @@ section {
         font-size: 10px;
     }
 }
-
 /* 
 .flex-1 {
     flex: 1 1 auto;
@@ -179,21 +176,35 @@ section {
     border-radius: 15px;
     line-height: 1.5;
     font-size: 12px;
+    padding: 10px;
 }
 
+.message-wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.message-container {
+    display: flex;
+    max-width: 80%; /* Limita el ancho de los mensajes */
+}
 /* .message-content {
     padding: 10px;
     border-radius: 15px;
 } */
 
 .sent {
-    background-color: #dcf8c6;
-    margin-left: auto;
-    text-align: right;
+    background-color: #dcf8c6; /* Color del mensaje enviado */
+    border-radius: 8px;
+    padding: 8px 12px;
+    text-align: left;
 }
 
 .received {
-    background-color: #fff;
+    background-color: #f1f0f0; /* Color del mensaje recibido */
+    border-radius: 8px;
+    padding: 8px 12px;
+    text-align: left;
 }
 
 /* Input del Mensaje */
@@ -291,13 +302,12 @@ input[type="text"]:focus {
       }
 
 
-  .text-time {
-    font-size: 0.75rem; /* Equivale a text-xs en Tailwind */
-    display: block;     /* Equivale a block */
-    margin-top: 0.25rem; /* Equivale a mt-1 (4px) */
-    text-align: right;  /* Para alinear a la derecha */
-    color: #888;
-  }
+      .text-time {
+        font-size: 0.75rem;         /* Tamaño pequeño para la hora */
+        display: block;             /* Bloque para asegurar alineación */
+        margin-top: 0.25rem;        /* Separación superior */
+        color: #888;                /* Color gris para la hora */
+    }
 
 
 .tag {
@@ -482,3 +492,4 @@ input[type="text"]:focus {
     font-weight: bold;
     margin-bottom: 16px;
 }
+
