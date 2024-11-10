@@ -24,29 +24,45 @@
         <!-- Lista de Clientes -->
         <div class="chat-list space-y-1">
             @foreach($customers as $customer)
-                <div class="chat-item flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-300 {{ $selectedCustomer === $customer->id ? 'selected' : '' }}"
+            <div class="chat-item flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-300 {{ $selectedCustomer === $customer->id ? 'selected' : '' }}"
                 wire:click="selectCustomer({{ $customer->id }})">
-                    <!-- Avatar del cliente -->
-                    <div class="avatar  mr-4 {{ 'avatar-' . ($customer->id % 5) }}">                
-                        <span class="text-white font-bold text-lg">
-                            {{ substr($customer->name, 0, 1) }}{{ substr($customer->lastname, 0, 1) }}
-                        </span>
-                    </div>
-                    <!-- Nombre del cliente -->
-                    <div class="flex-1 min-w-0">
-                        <h3 class="chat-name font-semibold truncate">{{ $customer->name.' '.$customer->lastname }}</h3>
-                        <!-- Mostrar etiquetas como botones -->
-                        <div class="mt-1 flex flex-wrap">
-                            @foreach($customer->tags as $tag)
-                                <button style="background-color: {{ $tag->color }};" 
-                                        class="tag" 
-                                        wire:click="showTagDetails({{ $customer->id }}, {{ $tag->id }})">
-                                    {{ $tag->name_tag }}
-                                </button>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
+               <!-- Avatar del cliente -->
+               <div class="avatar mr-4 {{ 'avatar-' . ($customer->id % 5) }}">                
+                   <span class="text-white font-bold text-lg">
+                       {{ substr($customer->name, 0, 1) }}{{ substr($customer->lastname, 0, 1) }}
+                   </span>
+               </div>
+               <!-- Información del cliente -->
+               <div class="flex-1 min-w-0">
+                   <!-- Nombre del cliente -->
+                   <h3 class="chat-name font-semibold truncate">{{ $customer->name.' '.$customer->lastname }}</h3>
+            
+                   <!-- Último mensaje y hora -->
+                   @if(isset($customer->lastMessage))
+                       <div class="last-message flex justify-between text-sm text-gray-600">
+                           <span class="message-text truncate">
+                               {{ $customer->lastMessage->direction === 'outbound' ? 'Tú: ' : '' }}
+                               {{ $customer->lastMessage->message }}
+                           </span>
+                           <span class="message-time">
+                               {{ $this->formatMessageDate($customer->lastMessage->timestamp) }}
+                           </span>
+                       </div>
+                   @endif
+               
+                   <!-- Etiquetas como botones -->
+                   <div class="mt-1 flex flex-wrap">
+                       @foreach($customer->tags as $tag)
+                           <button style="background-color: {{ $tag->color }};" 
+                                   class="tag" 
+                                   wire:click="showTagDetails({{ $customer->id }}, {{ $tag->id }})">
+                               {{ $tag->name_tag }}
+                           </button>
+                       @endforeach
+                   </div>
+               </div>
+           </div>
+           
             @endforeach
         </div>
     </div>
