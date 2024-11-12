@@ -10,7 +10,7 @@
           <i class="bi bi-arrow-up-circle-fill icon-style"></i>
       </a>
       <ul class="dropdown-menu" id="cargarMenu1">
-          <li><a class="dropdown-item" href="{{ route('customer.index') }}">Cliente</a></li>
+          <li><a class="dropdown-item" href="">Cliente</a></li>
           <li><a class="dropdown-item" href="#">Tareas</a></li>
       </ul>
     </li>
@@ -20,7 +20,7 @@
       </a>
       <ul class="dropdown-menu" id="cargarMenu2">
           <li><a class="dropdown-item" href="#">Notificaciones</a></li>
-          <li><a class="dropdown-item" href="{{ route('tag.index') }}">Tags</a></li>
+          <li><a class="dropdown-item" href="">Tags</a></li>
           <li><a class="dropdown-item" href="#">Cuenta email</a></li>
           <li><a class="dropdown-item" href="#">Datos empresa</a></li>
           <li><a class="dropdown-item" href="#">Configuración</a></li>
@@ -42,7 +42,7 @@
       </ul>
     </li>
     <li class="nav-item">
-      <a href="{{ route('customer.search') }}" class="nav-link py-3" aria-current="page" title="Buscar" data-bs-toggle="tooltip" data-bs-placement="right">
+      <a href="" class="nav-link py-3" aria-current="page" title="Buscar" data-bs-toggle="tooltip" data-bs-placement="right">
         <i class="bi bi-search icon-style"></i>
       </a>
     </li>
@@ -53,7 +53,7 @@
     </li>
    
     <li>
-      <a href="{{route('products.index')}}" class="nav-link link-dark py-3" title="Productos" data-bs-toggle="tooltip" data-bs-placement="right">
+      <a href="" class="nav-link link-dark py-3" title="Productos" data-bs-toggle="tooltip" data-bs-placement="right">
         <i class="bi bi-cart icon-style"></i>
       </a>
     </li>
