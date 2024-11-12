@@ -46,6 +46,7 @@ class ProductResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc') 
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nombre')
@@ -56,7 +57,7 @@ class ProductResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('price')
                     ->label('Precio')
-                    ->money()
+                    ->prefix('$')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Fecha de creación')
