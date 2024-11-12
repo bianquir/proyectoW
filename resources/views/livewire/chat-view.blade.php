@@ -3,8 +3,36 @@
 @endpush
 
 @push('scripts')
-    <script src="{{ asset('/js/filament/custom.js') }}"></script>
+ 
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script>
+        // Inicialización de Pusher
+        var pusher = new Pusher('3d2559e371614fe2127b', { cluster: 'eu' });
+    
+        pusher.connection.bind('connected', function() {
+            console.log('Conectado a Pusher');
+        });
+    
+        var channel = pusher.subscribe('chat-channel');
+        
+        channel.bind('chat-event', function(data) {
+            console.log('Data recibida:', data);  // Log para ver si se recibe
+            alert(JSON.stringify(data));
+            Livewire.on('refresh', () => {
+                // Este evento se dispara cada vez que se recibe un mensaje en tiempo real
+                Livewire.emit('updateLastMessages'); // Esto vuelve a cargar los mensajes
+            });             
+            });
+    
+        // Revisa si hay errores en la conexión
+        pusher.connection.bind('error', function(err) {
+            console.error('Error de conexión:', err);
+        });
+    </script>
+
+       <script src="{{ asset('/js/filament/custom.js') }}"></script>
 @endpush
+
 
 <div section class="chat-wrapper flex flex-col md:flex-row h-screen bg">
     <!-- Sidebar de Contactos (Clientes) -->
@@ -24,7 +52,11 @@
         <!-- Lista de Clientes -->
         <div class="chat-list space-y-1">
             @foreach($customers as $customer)
-            <div class="chat-item flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-300 {{ $selectedCustomer === $customer->id ? 'selected' : '' }}"
+            @php
+                // Verificar si el cliente tiene mensajes no leídos
+                 $unreadMessages = $customer->messages()->where('status', 'received')->count();
+            @endphp
+            <div class="chat-item flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-300 {{ $selectedCustomer === $customer->id ? 'selected' : '' }}  {{ $unreadMessages > 0 ? 'new-message' : '' }}""
                 wire:click="selectCustomer({{ $customer->id }})">
                <!-- Avatar del cliente -->
                <div class="avatar mr-4 {{ 'avatar-' . ($customer->id % 5) }}">                
@@ -95,15 +127,9 @@
                 </div>
             @endif
         </div>
-
-        @if($loadingMore)
-            <div class="text-center p-2 mb-2">
-                <span class="loader">Cargando más mensajes...</span>
-            </div>
-        @endif
-
+        
         <!-- Mensajes del Chat -->
-        <div id="chat-messages" class="chat-messages flex-1 overflow-y-auto p-2" wire:scroll.debounce.250ms="onScroll">
+        <div id="chat-messages" class="chat-messages flex-1 overflow-y-auto p-2" wire:scroll="onScroll">
             @if ($selectedCustomer && $messages->isNotEmpty())
                 @php
                     $lastDate = null;

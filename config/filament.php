@@ -57,6 +57,13 @@ return [
     */
 
     'assets_path' => null,
+    
+
+    'styles' => [
+    'css/filament-global.css',
+    ],
+
+
 
     /*
     |--------------------------------------------------------------------------
@@ -73,8 +80,5 @@ return [
 
     'livewire_loading_delay' => 'default',
 
-    'theme' => [
-    'default' => 'light',
-    'dark_mode' => false, // Asegúrate de que esta opción esté configurada en false
-    ],
+
 ];

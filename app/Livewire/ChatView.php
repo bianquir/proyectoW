@@ -9,6 +9,7 @@ use App\Models\Tag;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class ChatView extends Component
 {
@@ -33,6 +34,7 @@ class ChatView extends Component
         'color' => ''
     ];
     public $showDataModal = false;
+    protected $listeners = ['refresh'];
     
     public function mount()
     {
@@ -95,7 +97,16 @@ class ChatView extends Component
                             ->take(8)
                             ->get()
                             ->sortBy('timestamp');
-    
+            
+                            Message::where('customer_id', $this->selectedCustomer)
+                            ->where('status', 'received')
+                            ->chunk(100, function ($messages) {
+                                foreach ($messages as $message) {
+                                    $message->update(['status' => 'read']);
+                                }
+                            });
+
+
             // Obtener el último mensaje del cliente seleccionado
             $lastMessage = Message::where('customer_id', $this->selectedCustomer)
                             ->orderBy('timestamp', 'desc')
@@ -113,11 +124,11 @@ class ChatView extends Component
             $this->messages = collect(); 
         }
     
-        // Actualizar todos los últimos mensajes de los clientes
-        $this->updateLastMessages();
+        // // Actualizar todos los últimos mensajes de los clientes
+        // $this->updateLastMessages();
     }
     
-    private function updateLastMessages()
+    public function updateLastMessages()
     {
         // Obtener el último mensaje para cada cliente y actualizar la colección
         $lastMessages = Message::select('customer_id', 'message', 'direction', 'timestamp')
@@ -353,6 +364,12 @@ class ChatView extends Component
     public function closeDataModal()
     {
         $this->showDataModal = false;
+    }
+
+    public function refresh()
+    {
+        $this->updateLastMessages(); // Actualiza los últimos mensajes
+        $this->loadMessages(); // Recarga los mensajes del cliente seleccionado
     }
 
     public function render()

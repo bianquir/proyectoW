@@ -1,0 +1,16 @@
+body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* Desactiva cualquier estilo que aplique el modo oscuro */
+body.dark {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+:root {
+    --filament-primary-color: #000000;
+    --filament-secondary-color: #f0f0f0;
+    --filament-background-color: #ffffff;
+}

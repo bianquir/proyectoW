@@ -55,10 +55,6 @@ section {
         font-size: 10px;
     }
 }
-/* 
-.flex-1 {
-    flex: 1 1 auto;
-} */
 
 .bg {
     background-color: #ffffff;
@@ -492,4 +488,11 @@ input[type="text"]:focus {
     font-weight: bold;
     margin-bottom: 16px;
 }
+
+.new-message {
+    background-color: #76c496ce !important;
+    font-weight: bold;  /* Para hacerlo más visible */
+    color: #ffffff;
+}
+
 
