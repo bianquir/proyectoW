@@ -2,12 +2,12 @@
 
 1) clonar el respositorio con github desktop o por linea de comandos
 
-Link del repositorio: https://github.com/bianquir/proyectoW
-luego entrar a la carpeta del proyecto 
+    Link del repositorio: https://github.com/bianquir/proyectoW
+    luego entrar a la carpeta del proyecto 
 
 2) Duplicar el env.example y renombrar para dejar solo .env (borrar el .example)
 
-3)instalar composer y npm con los siguientes comandos en terminal:
+3) instalar composer y npm con los siguientes comandos en terminal:
     * composer install
     * npm install
 
@@ -29,8 +29,9 @@ luego entrar a la carpeta del proyecto
 8) Instalar Pusher
     * composer require pusher/pusher-php-server
 
-9) Ejecutar las migraciones
+9) Ejecutar las migraciones y los seeders
     * php artisan migrate
+    * php artisan db:seed
   
 10) Levantar el servidor, las dependencias de Js y ngrok
 
