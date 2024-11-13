@@ -70,7 +70,7 @@
             
                    <!-- Último mensaje y hora -->
                    @if(isset($customer->lastMessage))
-                       <div class="last-message flex justify-between text-sm text-gray-600 dark:text-gray-300" wire:poll>
+                       <div class="last-message flex justify-between text-sm text-gray-600 dark:text-gray-300">
                            <span class="message-text truncate">
                                {{ $customer->lastMessage->direction === 'outbound' ? 'Tú: ' : '' }}
                                {{ $customer->lastMessage->message }}
