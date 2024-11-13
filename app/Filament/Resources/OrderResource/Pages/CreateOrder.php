@@ -8,6 +8,7 @@ use App\Models\Order;
 use Filament\Actions;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Mail;
 
 class CreateOrder extends CreateRecord
