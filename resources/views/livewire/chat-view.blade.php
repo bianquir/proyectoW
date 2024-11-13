@@ -17,12 +17,8 @@
         
         channel.bind('chat-event', function(data) {
             console.log('Data recibida:', data);  // Log para ver si se recibe
-            alert(JSON.stringify(data));
-            Livewire.on('refresh', () => {
-                // Este evento se dispara cada vez que se recibe un mensaje en tiempo real
-                Livewire.emit('updateLastMessages'); // Esto vuelve a cargar los mensajes
+            Livewire.emit('refresh'); // Esto vuelve a cargar los mensajes
             });             
-            });
     
         // Revisa si hay errores en la conexión
         pusher.connection.bind('error', function(err) {
@@ -37,17 +33,17 @@
 <div section class="chat-wrapper flex flex-col md:flex-row h-screen bg">
     <!-- Sidebar de Contactos (Clientes) -->
     <div class="sidebar-chat w-full md:w-1/4 overflow-y-auto flex-shrink-0">
-        <!-- Barra de búsqueda -->
+        {{-- <!-- Barra de búsqueda -->
         <div class="search-bar-wrapper p-4 bg-gray-200">
             <input type="text" placeholder="Buscar chat..." class="search-bar input">
-        </div>
-
+        </div> --}}
+{{-- 
         <!-- Botones de filtro (Todos, No leídos, Grupos) -->
         <div class="button-wrapper flex justify-around p-2 m-12 bg-white border-b">
             <button class="button-filter">Todos</button>
             <button class="button-filter">No leídos</button>
             <button class="button-filter">Grupos</button>
-        </div>
+        </div> --}}
 
         <!-- Lista de Clientes -->
         <div class="chat-list space-y-1">
@@ -71,7 +67,7 @@
             
                    <!-- Último mensaje y hora -->
                    @if(isset($customer->lastMessage))
-                       <div class="last-message flex justify-between text-sm text-gray-600">
+                       <div class="last-message flex justify-between text-sm text-gray-600 dark:text-gray-300" wire:poll>
                            <span class="message-text truncate">
                                {{ $customer->lastMessage->direction === 'outbound' ? 'Tú: ' : '' }}
                                {{ $customer->lastMessage->message }}
@@ -162,9 +158,10 @@
                 @elseif ($selectedCustomer)
                 <p class="text-gray-500">No hay mensajes para este cliente.</p>
             @else
-                <div class="flex-1 text-center text-gray-500 flex flex-col items-center justify-center p-4 bg-gray-50 rounded-lg shadow-lg">
-                    <img src="{{ asset('img/CriticalDevs.png') }}" alt="Sin chat seleccionado" class="logo-inicio"> <!-- Ajusta la ruta y tamaño -->
-                    <h2 class="text-lg font-semibold">¡Hola!</h2>
+            <div class="chat-placeholder flex-1 text-center flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg">
+                <img src="{{ asset('img/CriticalDevs.png') }}" alt="Sin chat seleccionado" class="logo-inicio h-24 w-24 mb-4">
+                <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">¡Hola!</h2>
+                <p class="mt-4 text-sm text-gray-500 dark:text-gray-300">
                     <p class="mt-4 text-sm">No has seleccionado ningún chat aún. Por favor, elige un cliente para comenzar la conversación.</p>
                 </div>
             @endif
@@ -300,16 +297,16 @@
                 <div>
                     <form wire:submit.prevent="createTag">
                         <div class="mb-4">
-                            <label for="name_tag" class="block text-sm font-medium text-gray-700">Nombre de Tag</label>
-                            <input type="text" wire:model.defer="newTag.name_tag" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+                            <label for="name_tag" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre de Tag</label>
+                            <input type="text" wire:model.defer="newTag.name_tag" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:text-gray-300" required>
                         </div>
                         <div class="mb-4">
-                            <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
-                            <input type="text" wire:model.defer="newTag.description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Descripción</label>
+                            <input type="text" wire:model.defer="newTag.description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:text-gray-300">
                         </div>
                         <div class="mb-4">
-                            <label for="color" class="block text-sm font-medium text-gray-700">Color</label>
-                            <input type="color" wire:model.defer="newTag.color" class="mt-1 block w-full border-gray-300 rounded-md">
+                            <label for="color" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Color</label>
+                            <input type="color" wire:model.defer="newTag.color" class="mt-1 block w-full border-gray-300 rounded-md dark:text-white">
                         </div>
                         <div class="flex justify-end">
                             <button type="button" class="button-filter" wire:click="closeCreateTagModal">

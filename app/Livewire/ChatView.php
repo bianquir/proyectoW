@@ -332,7 +332,6 @@ class ChatView extends Component
 
     public function createTag()
     {
-        //VALIDAR LOS DATOSSSSSSSSSS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         $tag = Tag::create([
             'name_tag' => $this->newTag['name_tag'],
             'description' => $this->newTag['description'],
@@ -369,7 +368,7 @@ class ChatView extends Component
 
     public function refresh()
     {
-        $this->updateLastMessages(); // Actualiza los últimos mensajes
+
         $this->loadMessages(); // Recarga los mensajes del cliente seleccionado
     }
 
