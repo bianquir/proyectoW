@@ -622,7 +622,13 @@ body {
     .last-message {
         color: #d1d5db; /* Gris claro para texto en modo oscuro */
     }
-    .name_tag{
+    
+    .check-style,.input-tag-create{
         color: var(--text-dark);
+        background: var(--accent-dark);
+    }
+    .block{
+        color: var(--text-dark);
+        background-color: #333333;
     }
 }

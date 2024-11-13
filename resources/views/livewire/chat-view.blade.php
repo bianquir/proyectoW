@@ -260,10 +260,10 @@
                 </div>
             
                 <!-- Lista de Etiquetas con Checkboxes, con scroll si son muchas -->
-                <div class="flex-1 overflow-y-auto mb-4" style="max-height: 300px;">
-                    <ul class="space-y-2">
+                <div class="check-style flex-1 overflow-y-auto mb-4" style="max-height: 300px;">
+                    <ul class="check-style space-y-2">
                         @foreach($tags as $tag)
-                            <li class="py-2 px-4 bg-gray-100 rounded flex items-center hover:bg-gray-200 transition duration-200">
+                            <li class="check-style py-2 px-4 bg-gray-100 rounded flex items-center hover:bg-gray-200 transition duration-200">
                                 <!-- Checkbox con margen a la derecha -->
                                 <input type="checkbox" value="{{ $tag->id }}" wire:model="selectedTags" class="form-checkbox text-indigo-600 h-5 w-5 rounded-md focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
 
@@ -298,17 +298,17 @@
                 <!-- Formulario para crear una nueva etiqueta -->
                 <div>
                     <form wire:submit.prevent="createTag">
-                        <div class="mb-4">
+                        <div class="new-tag mb-4">
                             <label for="name_tag" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre de Tag</label>
-                            <input type="text" wire:model.defer="newTag.name_tag" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:text-gray-300" required>
+                            <input type="text" wire:model.defer="newTag.name_tag" class="input-tag-create mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                         </div>
                         <div class="mb-4">
                             <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Descripción</label>
-                            <input type="text" wire:model.defer="newTag.description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:text-gray-300">
+                            <input type="text" wire:model.defer="newTag.description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                         </div>
                         <div class="mb-4">
                             <label for="color" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Color</label>
-                            <input type="color" wire:model.defer="newTag.color" class="mt-1 block w-full border-gray-300 rounded-md dark:text-white">
+                            <input type="color" wire:model.defer="newTag.color" class="mt-1 block w-full border-gray-300 rounded-md">
                         </div>
                         <div class="flex justify-end">
                             <button type="button" class="button-filter" wire:click="closeCreateTagModal">
