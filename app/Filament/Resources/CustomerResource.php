@@ -21,47 +21,58 @@ class CustomerResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-s-user-group';
 
     public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Section::make('Datos personales')
-                    ->columns(2)
-                    ->schema([
-                        Forms\Components\TextInput::make('dni')
-                            ->label('DNI')
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('cuil')
-                            ->label('CUIL')
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('name')
-                            ->label('Nombre')
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('lastname')
-                            ->label('Apellido')
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('email')
-                            ->label('Correo electrónico')
-                            ->email()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('address')
-                            ->label('Dirección')
-                            ->maxLength(255),
-                        ]),
-                // Section::make('Datos del sistema')
-                //     ->columns(3)
-                //     ->schema([
-                //         Forms\Components\TextInput::make('wa_id')
-                //             ->required()
-                //             ->maxLength(20),
-                //         Forms\Components\Toggle::make('whatsapp_opt_in')
-                //             ->required(),
-            ]);
-    }
+{
+    return $form
+        ->schema([
+            Section::make('Datos personales')
+                ->columns(2)
+                ->schema([
+                    Forms\Components\TextInput::make('dni')
+                        ->label('DNI')
+                        ->required()
+                        ->numeric() 
+                        ->maxLength(8) 
+                        ->rule('digits:8') 
+                        ->placeholder('Ejemplo: 12345678'),
+                    
+                    Forms\Components\TextInput::make('cuil')
+                        ->label('CUIL')
+                        ->required()
+                        ->numeric() 
+                        ->maxLength(13) 
+                        ->placeholder('Ejemplo: 20-12345678-3'),
+                    
+                    Forms\Components\TextInput::make('name')
+                        ->label('Nombre')
+                        ->required()
+                        ->maxLength(30)
+                        ->rule('regex:/^[\pL\s]+$/u')
+                        ->placeholder('Ejemplo: Juan'),
+                    
+                    Forms\Components\TextInput::make('lastname')
+                        ->label('Apellido')
+                        ->maxLength(30)
+                        ->rule('regex:/^[\pL\s]+$/u') 
+                        ->placeholder('Ejemplo: Pérez'),
+                    
+                    Forms\Components\TextInput::make('email')
+                        ->label('Correo electrónico')
+                        ->email() 
+                        ->required()
+                        ->maxLength(255),
+                    
+                    Forms\Components\TextInput::make('address')
+                        ->label('Dirección')
+                        ->maxLength(30),
+                ]),
+        ]);
+}
+
 
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc') 
             ->columns([
                 Tables\Columns\TextColumn::make('dni')
                     ->label('DNI')

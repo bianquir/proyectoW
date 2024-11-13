@@ -27,21 +27,30 @@ class ProductResource extends Resource
                 Section::make('Datos del Producto')
                     ->columns(2)
                     ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->label('Nombre')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('description')
-                    ->label('Descripción')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('price')
-                    ->label('Precio')
-                    ->required()
-                    ->numeric()
-                    ->prefix('$'),
-                ]),
+                        Forms\Components\TextInput::make('name')
+                            ->label('Nombre')
+                            ->required()
+                            ->maxLength(50)
+                            ->rule('regex:/^[\pL\s]+$/u') 
+                            ->placeholder('Ejemplo: Producto A'),
+                        
+                        Forms\Components\TextInput::make('description')
+                            ->label('Descripción')
+                            ->maxLength(255)
+                            ->rule('regex:/^(?=.*[a-zA-Z])[\w\s]+$/') 
+                            ->placeholder('Ejemplo: Producto de alta calidad'),
+                        
+                        Forms\Components\TextInput::make('price')
+                            ->label('Precio')
+                            ->required()
+                            ->numeric()
+                            ->rule('integer') 
+                            ->prefix('$')
+                            ->placeholder('Ejemplo: 100'),
+                    ]),
             ]);
     }
+    
 
     public static function table(Table $table): Table
     {

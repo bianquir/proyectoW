@@ -25,26 +25,31 @@ class TagResource extends Resource
         return $form
             ->schema([
                 Section::make('Datos del Tag')
-                ->columns(2)
-                ->schema([
-                Forms\Components\TextInput::make('name_tag')
-                    ->label('Nombre de Tag')
-                    ->required()
-                    ->maxLength(20),
-                Forms\Components\TextInput::make('description')
-                    ->label('Descripción')
-                    ->maxLength(255),
-                Forms\Components\ColorPicker::make('color')
-                    ->label('Color')
-                    ->required(),
-
-                ]),
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\TextInput::make('name_tag')
+                            ->label('Nombre de Tag')
+                            ->required()
+                            ->maxLength(20)
+                            ->rule('regex:/^[\w\s]+$/') 
+                            ->placeholder('Ejemplo: Tag123'),
+    
+                        Forms\Components\TextInput::make('description')
+                            ->label('Descripción')
+                            ->maxLength(255),
+    
+                        Forms\Components\ColorPicker::make('color')
+                            ->label('Color')
+                            ->required(),
+                    ]),
             ]);
     }
+    
 
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc') 
             ->columns([
                 Tables\Columns\TextColumn::make('name_tag')
                     ->label('Nombre de Tag')
