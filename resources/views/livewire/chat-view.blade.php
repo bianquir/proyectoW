@@ -33,18 +33,21 @@
 <div section class="chat-wrapper flex flex-col md:flex-row h-screen bg">
     <!-- Sidebar de Contactos (Clientes) -->
     <div class="sidebar-chat w-full md:w-1/4 overflow-y-auto flex-shrink-0">
-        {{-- <!-- Barra de búsqueda -->
+        <!-- Barra de búsqueda -->
         <div class="search-bar-wrapper p-4 bg-gray-200">
             <input type="text" placeholder="Buscar chat..." class="search-bar input">
-        </div> --}}
-{{-- 
+        </div> 
+
         <!-- Botones de filtro (Todos, No leídos, Grupos) -->
         <div class="button-wrapper flex justify-around p-2 m-12 bg-white border-b">
-            <button class="button-filter">Todos</button>
-            <button class="button-filter">No leídos</button>
-            <button class="button-filter">Grupos</button>
-        </div> --}}
-
+            <button class="button-filter {{ $filter === 'all' ? 'bg-blue-500 text-white' : '' }}"
+                    wire:click="filterAll">Todos</button>
+            <button class="button-filter {{ $filter === 'unread' ? 'bg-blue-500 text-white' : '' }}"
+                    wire:click="filterUnread">No leídos</button>
+            <button class="button-filter {{ $filter === 'read' ? 'bg-blue-500 text-white' : '' }}"
+                    wire:click="filterRead">Leídos</button>
+        </div>
+        
         <!-- Lista de Clientes -->
         <div class="chat-list space-y-1">
             @foreach($customers as $customer)
@@ -90,7 +93,6 @@
                    </div>
                </div>
            </div>
-           
             @endforeach
         </div>
     </div>

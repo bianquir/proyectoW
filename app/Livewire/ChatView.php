@@ -35,39 +35,90 @@ class ChatView extends Component
     ];
     public $showDataModal = false;
     protected $listeners = ['refresh'];
+    public $filter = 'all';
     
     public function mount()
     {
-        // Obtener el último mensaje de cada cliente
+        // Obtener los últimos mensajes de cada cliente
         $lastMessages = Message::select('customer_id', 'message', 'direction', 'timestamp')
-        ->whereIn('timestamp', function ($query) {
-            $query->select(DB::raw('MAX(timestamp)'))
-                ->from('messages')
-                ->groupBy('customer_id');
-        })
-        ->get();
-    
-        if ($lastMessages->isEmpty()) {
-            $this->customers = collect();
-            return;
-        }
+            ->whereIn('timestamp', function ($query) {
+                $query->select(DB::raw('MAX(timestamp)'))
+                    ->from('messages')
+                    ->groupBy('customer_id');
+            })
+            ->get()
+            ->keyBy('customer_id'); // Agrupar por customer_id para acceso fácil
     
         // Cargar clientes y sus últimos mensajes
+        $this->customers = Customer::with('tags')
+            ->whereIn('id', $lastMessages->keys())
+            ->get()
+            ->each(function ($customer) use ($lastMessages) {
+                $customer->lastMessage = $lastMessages->get($customer->id);
+            });
+    
+        $this->selectedCustomer = null; // Inicializar cliente seleccionado
+    }
+    
+    public function loadCustomers()
+    {
+        $lastMessagesQuery = Message::select('customer_id', 'message', 'status', 'direction', 'timestamp')
+            ->whereIn('timestamp', function ($query) {
+                $query->select(DB::raw('MAX(timestamp)'))
+                    ->from('messages')
+                    ->groupBy('customer_id');
+            });
+
+        // Aplicar el filtro de estado en los últimos mensajes
+        if ($this->filter === 'unread') {
+            $lastMessagesQuery->where('status', 'received');
+        } elseif ($this->filter === 'read') {
+            $lastMessagesQuery->where('status', 'read');
+        }
+
+        $lastMessages = $lastMessagesQuery->get();
+
+        if ($lastMessages->isEmpty()) {
+            $this->customers = collect();
+            $this->selectedCustomer = null; // Deseleccionar cliente si no hay resultados
+            return;
+        }
+
+        // Cargar los clientes cuyos últimos mensajes cumplen con el filtro
         $this->customers = Customer::with('tags')
             ->whereIn('id', $lastMessages->pluck('customer_id'))
             ->get()
             ->each(function ($customer) use ($lastMessages) {
                 $lastMessage = $lastMessages->firstWhere('customer_id', $customer->id);
-                if ($lastMessage) {
-                    $customer->lastMessage = $lastMessage;
-                }
+                $customer->lastMessage = $lastMessage ?? null;
             })
             ->sortByDesc(fn($customer) => $customer->lastMessage->timestamp ?? null);
-    
-        // Inicializa variables adicionales si es necesario
-        $this->selectedCustomer = null;
+
+        // Si el cliente seleccionado no pasa el filtro, deseleccionarlo
+        if (!$this->customers->contains('id', $this->selectedCustomer)) {
+            $this->selectedCustomer = null;
+        }
     }
-    
+
+    // Métodos de filtrado para actualizar el filtro y recargar la lista
+    public function filterAll()
+    {
+        $this->filter = 'all';
+        $this->loadCustomers(); // Recargar clientes
+    }
+
+    public function filterUnread()
+    {
+        $this->filter = 'unread';
+        $this->loadCustomers(); // Recargar clientes
+    }
+
+    public function filterRead()
+    {
+        $this->filter = 'read';
+        $this->loadCustomers(); // Recargar clientes
+    }
+
     public function formatMessageDate($timestamp)
     {
         $messageDate = Carbon::parse($timestamp);
@@ -124,7 +175,7 @@ class ChatView extends Component
             $this->messages = collect(); 
         }
     
-        // // Actualizar todos los últimos mensajes de los clientes
+        //Actualizar todos los últimos mensajes de los clientes
         // $this->updateLastMessages();
     }
     
