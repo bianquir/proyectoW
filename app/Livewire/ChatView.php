@@ -118,6 +118,9 @@ class ChatView extends Component
         } else {
             $this->loadCustomers();
         }
+        if (!$this->customers->contains('id', $this->selectedCustomer)) {
+            $this->selectedCustomer = null;
+        }
     }
 
     public function clearSearch()

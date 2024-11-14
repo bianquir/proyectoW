@@ -32,7 +32,7 @@ class OrderCreatedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Confirmación de tu pedido', // Cambia el asunto si deseas algo más específico
+            subject: 'Confirmación de tu pedido', 
         );
     }
 
@@ -42,7 +42,7 @@ class OrderCreatedMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email.order-create', // Asegúrate de que esta vista exista en 'resources/views/emails/order-created.blade.php'
+            view: 'email.order-create', 
             with: [
                 'order' => $this->order,
             ],
