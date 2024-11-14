@@ -16,12 +16,10 @@
   
 5) Instalar Filament
     * composer require filament/filament
-    * php artisan migrate
 
 6) Instalar Breeze
     * composer require laravel/breeze --dev
     * php artisan breeze:install
-    * php artisan migrate
 
 7) Instalar Livewire
     * composer require livewire/livewire
@@ -29,14 +27,29 @@
 8) Instalar Pusher
     * composer require pusher/pusher-php-server
 
-9) Ejecutar las migraciones y los seeders
+9) Ejecutar las migraciones y los seeders (antes coloca en el archivo .env el nombre de la base de datos que creaste para utilizar
+    *Ejemplo:
+    *DB_DATABASE=nombre-base-de-datos
+    *DB_USERNAME=root
+    *DB_PASSWORD=
+    ):
+
+    Luego ejecutar:
     * php artisan migrate
     * php artisan db:seed
-  
-10) Levantar el servidor, las dependencias de Js y ngrok
+
+10) Ingresar a la web https://ngrok.com/ e ingresar con el siguiente mail y contraseña:
+    *Mail: triodinamicoapps@gmail.com
+    *Contraseña: Triodinamico123-
+
+    *Una vez ingresado dirigirse al panel "Getting Started", a la opción "Your Authtoken":
+    *Copia el Token dado y colocalo reemplazando la variable $YOUR_AUTHTOKEN. Luego, coloca el siguiente comando en la terminal:
+    *ngrok config add-authtoken $YOUR_AUTHTOKEN
+
+11) Levantar el servidor, las dependencias de Js y ngrok
 
     * php artisan serve
     * npm run dev
     * ngrok http 8000
 
-11) Conectar el acceso en developers.facebook (Contacta con nosotros para gestionar el acceso)
+12) Conectar el acceso en developers.facebook (Contacta con nosotros para gestionar el acceso)
