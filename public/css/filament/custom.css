@@ -56,7 +56,7 @@ section {
 }
 
 .bg {
-    background-color: #ffffff;
+    background-color: var(--bg-light);
 }
 
 /* Sidebar de Contactos */
@@ -657,6 +657,12 @@ body {
         color: #2be2e2!important;
     }
     .mark-button{
+        color: var(--accent-light);
+    }
+    .text-xl{
+        color: var(--accent-light);
+    }
+    .chat-name{
         color: var(--accent-light);
     }
 }

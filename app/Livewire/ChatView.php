@@ -111,6 +111,8 @@ class ChatView extends Component
                 ->get();
 
             if ($this->customers->isEmpty()) {
+                $this->customers = collect();
+                $this->selectedCustomer = null; // Deseleccionar cliente si no hay resultados
                 session()->flash('message', 'No se encontraron chats.');
             }
         } else {
