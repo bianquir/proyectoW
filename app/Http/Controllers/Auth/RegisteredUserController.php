@@ -31,20 +31,20 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'regex:/^[\pL\s]+$/u', 'max:50'], 
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class, 'regex:/^[\w._%+-]+@(gmail\.com|hotmail\.com|yahoo\.com)$/'],
+            'name' => ['required', 'string', 'regex:/^[\pL\s]+$/u', 'max:25'], 
+            'email' => ['required', 'string', 'email', 'max:30', 'unique:' . User::class, 'regex:/^[\w._%+-]+@(gmail\.com|hotmail\.com|yahoo\.com)$/'],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ], [
             // Mensajes personalizados
             'name.required' => 'El nombre es obligatorio.',
             'name.string' => 'El nombre debe ser una cadena de texto.',
             'name.regex' => 'El nombre solo debe contener letras y espacios.',
-            'name.max' => 'El nombre no puede tener más de 50 caracteres.', 
+            'name.max' => 'El nombre no puede tener más de 25 caracteres.', 
     
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.string' => 'El correo electrónico debe ser una cadena de texto.',
             'email.email' => 'Debe ingresar un correo electrónico válido.',
-            'email.max' => 'El correo electrónico no puede tener más de 255 caracteres.',
+            'email.max' => 'El correo electrónico no puede tener más de 30 caracteres.',
             'email.unique' => 'Este correo electrónico ya está registrado.',
             'email.regex' => 'Por favor ingresa un correo electrónico válido.',
     
