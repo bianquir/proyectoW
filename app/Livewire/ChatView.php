@@ -419,8 +419,7 @@ class ChatView extends Component
 
     public function refresh()
     {
-
-        $this->loadMessages(); // Recarga los mensajes del cliente seleccionado
+        $this->loadMessages(); 
     }
 
     public function render()

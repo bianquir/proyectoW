@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class TagResource extends Resource
 {
     protected static ?string $model = Tag::class;
-    protected static ?string $navigationLabel = 'Tags';
+    protected static ?string $navigationLabel = 'Etiquetas';
     protected static ?string $navigationIcon = 'heroicon-m-tag';
 
     public static function form(Form $form): Form
@@ -28,7 +28,7 @@ class TagResource extends Resource
                     ->columns(2)
                     ->schema([
                         Forms\Components\TextInput::make('name_tag')
-                            ->label('Nombre de Tag')
+                            ->label('Nombre de etiqueta')
                             ->required()
                             ->maxLength(20)
                             ->rule('regex:/^[\w\s]+$/') 
@@ -52,7 +52,7 @@ class TagResource extends Resource
             ->defaultSort('created_at', 'desc') 
             ->columns([
                 Tables\Columns\TextColumn::make('name_tag')
-                    ->label('Nombre de Tag')
+                    ->label('Nombre de etiqueta')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('description')

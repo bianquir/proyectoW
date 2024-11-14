@@ -65,7 +65,7 @@ class OrderResource extends Resource
                         TextInput::make('state')
                             ->label('Estado')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(50),
                     ]),
                 
                 Section::make('Detalles del Pedido')

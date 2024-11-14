@@ -28,19 +28,22 @@ class CustomerResource extends Resource
                 ->columns(2)
                 ->schema([
                     Forms\Components\TextInput::make('dni')
-                        ->label('DNI')
-                        ->required()
-                        ->numeric() 
-                        ->maxLength(8) 
-                        ->rule('digits:8') 
-                        ->placeholder('Ejemplo: 12345678'),
-                    
+                    ->label('DNI')
+                    ->required()
+                    ->numeric()
+                    ->maxLength(8)
+                    ->rule('digits:8')
+                    ->rule('unique:customers,dni')  // Validación de unicidad para el campo DNI
+                    ->placeholder('Ejemplo: 12345678'),
+
                     Forms\Components\TextInput::make('cuil')
-                        ->label('CUIL')
-                        ->required()
-                        ->numeric() 
-                        ->maxLength(13) 
-                        ->placeholder('Ejemplo: 20-12345678-3'),
+                    ->label('CUIL')
+                    ->required()
+                    ->numeric()
+                    ->maxLength(13)
+                    ->rule('unique:customers,cuil')  // Validación de unicidad para el campo CUIL
+                    ->placeholder('Ejemplo: 20-12345678-3'),
+
                     
                     Forms\Components\TextInput::make('name')
                         ->label('Nombre')
