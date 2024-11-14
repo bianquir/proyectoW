@@ -36,6 +36,7 @@ class ChatView extends Component
     public $showDataModal = false;
     protected $listeners = ['refresh'];
     public $filter = 'all';
+    public $search;
     
     public function mount()
     {
@@ -58,6 +59,7 @@ class ChatView extends Component
             });
     
         $this->selectedCustomer = null; // Inicializar cliente seleccionado
+        $this->loadCustomers();
     }
     
     public function loadCustomers()
@@ -98,6 +100,28 @@ class ChatView extends Component
         if (!$this->customers->contains('id', $this->selectedCustomer)) {
             $this->selectedCustomer = null;
         }
+    }
+
+    public function buscarClientes()
+    {
+        if (!empty($this->search)) {
+            $this->customers = Customer::with('tags')
+                ->where('name', 'like', '%' . $this->search . '%')
+                ->orWhere('lastname', 'like', '%' . $this->search . '%')
+                ->get();
+
+            if ($this->customers->isEmpty()) {
+                session()->flash('message', 'No se encontraron chats.');
+            }
+        } else {
+            $this->loadCustomers();
+        }
+    }
+
+    public function clearSearch()
+    {
+        $this->search = '';
+        $this->loadCustomers();
     }
 
     // Métodos de filtrado para actualizar el filtro y recargar la lista

@@ -510,7 +510,26 @@ input[type="text"]:focus {
 .last-message .message-time {
     color: inherit;
 }
-
+.search-button{
+    color:rgba(33, 165, 165, 0.753) !important;
+    font-size: 12px;
+    font-weight: 30;
+    padding: 0.5em 1.2em;
+    background: transparent;
+    transition: all 1s ease;
+    position: relative;
+    margin-left: 1px; /* Ajusta este valor para el espaciado */
+    margin-right: 1px; 
+}
+.search-button:hover {
+    color: rgb(21, 114, 114) !important;
+}
+.mark-button{
+    color: rgb(33, 165, 165) !important;
+}
+.mark-button:hover{
+    color: rgba(12, 116, 116, 0.753) !important;
+}
 
 /* Modo claro y oscuro */
 :root {
@@ -630,5 +649,14 @@ body {
     .block{
         color: var(--text-dark);
         background-color: #333333;
+    }
+    .search-button,.button-tag{
+        color:#28aaaa!important;
+    }
+    .search-button:hover,.button-tag:hover{
+        color: #2be2e2!important;
+    }
+    .mark-button{
+        color: var(--accent-light);
     }
 }

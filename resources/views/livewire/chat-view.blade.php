@@ -34,8 +34,12 @@
     <!-- Sidebar de Contactos (Clientes) -->
     <div class="sidebar-chat w-full md:w-1/4 overflow-y-auto flex-shrink-0">
         <!-- Barra de búsqueda -->
-        <div class="search-bar-wrapper p-4 bg-gray-200">
-            <input type="text" placeholder="Buscar chat..." class="search-bar input">
+        <div class="search-bar-wrapper p-4 bg-gray-200 flex items-center">
+            <input type="text" placeholder="Buscar chat..." class="search-bar input flex-1" wire:model.defer="search">
+            <button class="search-button btn btn-primary ml-2" wire:click="buscarClientes"> <x-heroicon-m-magnifying-glass class="h-6 w-6" /> </button>
+            @if($search)
+                <button class="mark-button btn btn-secondary ml-2" wire:click="clearSearch"><x-heroicon-c-x-mark class="h-6 w-6" /></button>
+            @endif
         </div> 
 
         <!-- Botones de filtro (Todos, No leídos, Grupos) -->
@@ -50,6 +54,11 @@
         
         <!-- Lista de Clientes -->
         <div class="chat-list space-y-1">
+            <!-- Mensaje de error si no hay resultados -->
+            @if (session()->has('message'))
+            <div class="text-red-500 text-center p-2">{{ session('message') }}</div>
+            @endif
+            
             @foreach($customers as $customer)
             @php
                 // Verificar si el cliente tiene mensajes no leídos
@@ -161,8 +170,8 @@
                 <p class="text-gray-500">No hay mensajes para este cliente.</p>
             @else
             <div class="chat-placeholder flex-1 text-center flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg">
-                <img src="{{ asset('img/CriticalDevs.png') }}" alt="Sin chat seleccionado" class="logo-inicio h-24 w-24 mb-4">
-                <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">¡Hola!</h2>
+                <img src="{{ asset('img\logo.webp') }}" alt="Sin chat seleccionado" class="logo-inicio h-28 w-28 mb-4">
+                <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">¡Hola! Bienvenido a Wappi</h2>
                 <p class="mt-4 text-sm text-gray-500 dark:text-gray-300">
                     <p class="mt-4 text-sm">No has seleccionado ningún chat aún. Por favor, elige un cliente para comenzar la conversación.</p>
                 </div>
