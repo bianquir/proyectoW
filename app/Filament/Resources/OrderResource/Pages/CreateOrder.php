@@ -30,14 +30,13 @@ class CreateOrder extends CreateRecord
         // Obtiene el pedido recién creado
         $order = $this->record;
     
-        // Verifica si el cliente tiene un correo electrónico
         if ($order->customer->email) {
             // Si el cliente tiene correo, se envía el correo
             Mail::to($order->customer->email)->send(new OrderCreatedMail($order));
         } else {
             Notification::make()
             ->title('Error')
-            ->danger()  // Tipo de notificación (danger indica un error o advertencia)
+            ->danger()  
             ->body('El cliente no tiene un correo electrónico registrado. No se pudo enviar el correo.')
             ->send();
         }
