@@ -21,4 +21,13 @@ class ListCustomers extends ListRecords
     {
         return 'Listado de clientes';
     }
+
+    public function getBreadcrumbs(): array
+    {
+        return [
+            url('/admin')=> 'Inicio',
+            CustomerResource::getUrl()=>'Clientes',
+            'Listado de clientes',
+        ];
+    }
 }

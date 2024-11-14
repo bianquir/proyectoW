@@ -41,5 +41,13 @@ class CreateOrder extends CreateRecord
             ->send();
         }
     }
+    public function getBreadcrumbs(): array
+    {
+        return [
+            url('/admin')=> 'Inicio',
+            OrderResource::getUrl()=>'Pedidos',
+            'Crear pedido',
+        ];
+    }
     
 }

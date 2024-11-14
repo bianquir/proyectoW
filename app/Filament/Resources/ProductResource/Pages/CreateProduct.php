@@ -19,4 +19,14 @@ class CreateProduct extends CreateRecord
     {
         return $this->getResource()::getUrl('index');
     }
+
+    
+    public function getBreadcrumbs(): array
+    {
+        return [
+            url('/admin')=> 'Inicio',
+            ProductResource::getUrl()=>'Productos',
+            'Crear producto',
+        ];
+    }
 }

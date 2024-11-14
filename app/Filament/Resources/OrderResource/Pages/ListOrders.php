@@ -22,4 +22,12 @@ class ListOrders extends ListRecords
     {
         return 'Listado de pedidos';
     }
+    public function getBreadcrumbs(): array
+    {
+        return [
+            url('/admin')=> 'Inicio',
+            OrderResource::getUrl()=>'Pedidos',
+            'Listado de pedidos',
+        ];
+    }
 }

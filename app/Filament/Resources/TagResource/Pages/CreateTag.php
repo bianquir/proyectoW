@@ -19,4 +19,13 @@ class CreateTag extends CreateRecord
     {
         return $this->getResource()::getUrl('index');
     }
+
+    public function getBreadcrumbs(): array
+    {
+        return [
+            url('/admin')=> 'Inicio',
+            TagResource::getUrl()=>'Etiquetas',
+            'Crear etiqueta',
+        ];
+    }
 }

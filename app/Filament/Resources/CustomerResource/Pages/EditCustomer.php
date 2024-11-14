@@ -26,4 +26,13 @@ class EditCustomer extends EditRecord
     {
         return $this->getResource()::getUrl('index');
     }
+
+    public function getBreadcrumbs(): array
+    {
+        return [
+            url('/admin')=> 'Inicio',
+            CustomerResource::getUrl()=>'Clientes',
+            'Editar cliente',
+        ];
+    }
 }

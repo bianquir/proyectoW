@@ -88,7 +88,10 @@ class ProductResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                    ->modalHeading('¿Borrar producto/s seleccionado/s?')
+                    ->modalSubheading('Esta acción no se puede deshacer. ¿Estás seguro de que deseas continuar?')
+                    ->label('Eliminar producto/s'),
                 ]),
             ]);
     }

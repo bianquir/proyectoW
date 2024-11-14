@@ -22,4 +22,13 @@ class ListTags extends ListRecords
     {
         return 'Listado de Etiquetas';
     }
+
+    public function getBreadcrumbs(): array
+    {
+        return [
+            url('/admin')=> 'Inicio',
+            TagResource::getUrl()=>'Etiquetas',
+            'Listado de etiquetas',
+        ];
+    }
 }

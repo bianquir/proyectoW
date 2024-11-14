@@ -22,4 +22,13 @@ class ListProducts extends ListRecords
     {
         return 'Listado de Productos';
     }
+
+    public function getBreadcrumbs(): array
+    {
+        return [
+            url('/admin')=> 'Inicio',
+            ProductResource::getUrl()=>'Productos',
+            'Listado de productos',
+        ];
+    }
 }

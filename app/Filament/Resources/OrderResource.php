@@ -78,7 +78,8 @@ class OrderResource extends Resource
                                 Select::make('product_id')
                                     ->label('Producto')
                                     ->options(Product::all()->pluck('name', 'id'))
-                                    ->required(),
+                                    ->required()
+                                    ->searchable(),
                         
                                 FormsTextInput::make('quantity')
                                     ->label('Cantidad')
@@ -98,12 +99,14 @@ class OrderResource extends Resource
             ->columns([
                 TextColumn::make('customer.name')
                     ->label('Cliente')
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 
                     TextColumn::make('shipping_day')
                     ->label('Día del pedido')
                     ->getStateUsing(fn ($record) => Carbon::parse($record->shipping_day)->format('d/m/Y'))
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
 
                 TextColumn::make('state')
                     ->label('Estado')
@@ -126,9 +129,13 @@ class OrderResource extends Resource
             ])
             ->bulkActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->modalHeading('¿Borrar pedido/s seleccionado/s?')
+                        ->modalSubheading('Esta acción no se puede deshacer. ¿Estás seguro de que deseas continuar?')
+                        ->label('Eliminar pedido/s'),
                 ]),
             ]);
+            
     }
 
     public static function getPages(): array

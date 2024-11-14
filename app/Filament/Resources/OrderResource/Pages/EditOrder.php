@@ -26,4 +26,13 @@ class EditOrder extends EditRecord
     {
         return $this->getResource()::getUrl('index');
     }
+
+    public function getBreadcrumbs(): array
+    {
+        return [
+            url('/admin')=> 'Inicio',
+            OrderResource::getUrl()=>'Pedidos',
+            'Editar pedido',
+        ];
+    }
 }

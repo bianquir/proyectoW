@@ -26,4 +26,14 @@ class EditProduct extends EditRecord
     {
         return $this->getResource()::getUrl('index');
     }
+
+    
+    public function getBreadcrumbs(): array
+    {
+        return [
+            url('/admin')=> 'Inicio',
+            ProductResource::getUrl()=>'Productos',
+            'Editar producto',
+        ];
+    }
 }

@@ -26,4 +26,13 @@ class EditTag extends EditRecord
     {
         return $this->getResource()::getUrl('index');
     }
+
+    public function getBreadcrumbs(): array
+    {
+        return [
+            url('/admin')=> 'Inicio',
+            TagResource::getUrl()=>'Etiquetas',
+            'Editar etiqueta',
+        ];
+    }
 }
