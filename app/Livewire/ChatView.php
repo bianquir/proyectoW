@@ -34,9 +34,10 @@ class ChatView extends Component
         'color' => ''
     ];
     public $showDataModal = false;
-    protected $listeners = ['refresh'];
+    protected $listeners = ['ChatMessages' => 'addNewMessage', 'refreshMessages'];
     public $filter = 'all';
     public $search;
+    public $messagesNew = [];
     
     public function mount()
     {
@@ -59,6 +60,17 @@ class ChatView extends Component
             });
     
         $this->selectedCustomer = null; // Inicializar cliente seleccionado
+        $this->loadCustomers();
+    }
+
+    public function addNewMessage($data)
+    {
+        $this->messagesNew[] = $data;
+    }
+
+    public function refreshMessages()
+    {
+        $this->loadMessages();
         $this->loadCustomers();
     }
     
@@ -100,6 +112,81 @@ class ChatView extends Component
         if (!$this->customers->contains('id', $this->selectedCustomer)) {
             $this->selectedCustomer = null;
         }
+    }
+
+    
+    public function loadMessages()
+    {
+        if ($this->selectedCustomer) {
+            // Cargar los mensajes del cliente seleccionado
+            $this->messages = Message::where('customer_id', $this->selectedCustomer)
+                            ->orderBy('timestamp', 'desc')
+                            ->get()
+                            ->sortBy('timestamp');
+            
+                            Message::where('customer_id', $this->selectedCustomer)
+                            ->where('status', 'received')
+                            ->chunk(100, function ($messages) {
+                                foreach ($messages as $message) {
+                                    $message->update(['status' => 'read']);
+                                }
+                            });
+
+
+            // Obtener el último mensaje del cliente seleccionado
+            $lastMessage = Message::where('customer_id', $this->selectedCustomer)
+                            ->orderBy('timestamp', 'desc')
+                            ->first();
+    
+            // Si hay un último mensaje, actualizarlo en la colección de clientes
+            if ($lastMessage) {
+                // Actualiza el último mensaje solo si el cliente está en la lista
+                $customer = $this->customers->firstWhere('id', $this->selectedCustomer);
+                if ($customer) {
+                    $customer->lastMessage = $lastMessage;
+                }
+            }
+        } else {
+            $this->messages = collect(); 
+        }
+    
+        //Actualizar todos los últimos mensajes de los clientes
+        // $this->updateLastMessages();
+    }
+    
+    public function updateLastMessages()
+    {
+        // Obtener el último mensaje para cada cliente y actualizar la colección
+        $lastMessages = Message::select('customer_id', 'message', 'direction', 'timestamp')
+            ->whereIn('customer_id', $this->customers->pluck('id'))
+            ->whereIn('timestamp', function ($query) {
+                $query->select(DB::raw('MAX(timestamp)'))
+                    ->from('messages')
+                    ->groupBy('customer_id');
+            })
+            ->get();
+    
+        foreach ($this->customers as $customer) {
+            $lastMessage = $lastMessages->firstWhere('customer_id', $customer->id);
+            if ($lastMessage) {
+                $customer->lastMessage = $lastMessage;
+            } else {
+                // Si no hay mensaje, puedes limpiar el lastMessage o dejarlo como está
+                unset($customer->lastMessage);
+            }
+        }
+    }
+
+    public function selectCustomer($customerId)
+    {
+        // Cambia el cliente seleccionado y recarga los mensajes
+        $this->selectedCustomer = $customerId;
+        $this->loadMessages(); // This method should load messages for the selected customer
+        $this->loadCustomerTags(); // Load tags associated with the selected customer
+        if ($this->customers->firstWhere('id', $this->selectedCustomer)) {
+            $this->updateLastMessages(); // Opcional, para mantener actualizada la colección
+        }
+    
     }
 
     public function buscarClientes()
@@ -168,70 +255,6 @@ class ChatView extends Component
     }
 
 
-    public function loadMessages()
-    {
-        if ($this->selectedCustomer) {
-            // Cargar los mensajes del cliente seleccionado
-            $this->messages = Message::where('customer_id', $this->selectedCustomer)
-                            ->orderBy('timestamp', 'desc')
-                            ->take(8)
-                            ->get()
-                            ->sortBy('timestamp');
-            
-                            Message::where('customer_id', $this->selectedCustomer)
-                            ->where('status', 'received')
-                            ->chunk(100, function ($messages) {
-                                foreach ($messages as $message) {
-                                    $message->update(['status' => 'read']);
-                                }
-                            });
-
-
-            // Obtener el último mensaje del cliente seleccionado
-            $lastMessage = Message::where('customer_id', $this->selectedCustomer)
-                            ->orderBy('timestamp', 'desc')
-                            ->first();
-    
-            // Si hay un último mensaje, actualizarlo en la colección de clientes
-            if ($lastMessage) {
-                // Actualiza el último mensaje solo si el cliente está en la lista
-                $customer = $this->customers->firstWhere('id', $this->selectedCustomer);
-                if ($customer) {
-                    $customer->lastMessage = $lastMessage;
-                }
-            }
-        } else {
-            $this->messages = collect(); 
-        }
-    
-        //Actualizar todos los últimos mensajes de los clientes
-        // $this->updateLastMessages();
-    }
-    
-    public function updateLastMessages()
-    {
-        // Obtener el último mensaje para cada cliente y actualizar la colección
-        $lastMessages = Message::select('customer_id', 'message', 'direction', 'timestamp')
-            ->whereIn('customer_id', $this->customers->pluck('id'))
-            ->whereIn('timestamp', function ($query) {
-                $query->select(DB::raw('MAX(timestamp)'))
-                    ->from('messages')
-                    ->groupBy('customer_id');
-            })
-            ->get();
-    
-        foreach ($this->customers as $customer) {
-            $lastMessage = $lastMessages->firstWhere('customer_id', $customer->id);
-            if ($lastMessage) {
-                $customer->lastMessage = $lastMessage;
-            } else {
-                // Si no hay mensaje, puedes limpiar el lastMessage o dejarlo como está
-                unset($customer->lastMessage);
-            }
-        }
-    }
-    
-
     public function loadMoreMessages()
     {
         $this->loadingMore = true;
@@ -263,16 +286,6 @@ class ChatView extends Component
         if ($scrollPosition < 8) {
             $this->loadMoreMessages();
         }
-    }
-
-
-    public function selectCustomer($customerId)
-    {
-        // Cambia el cliente seleccionado y recarga los mensajes
-        $this->selectedCustomer = $customerId;
-        $this->loadMessages(); // This method should load messages for the selected customer
-        $this->loadCustomerTags(); // Load tags associated with the selected customer
-    
     }
 
     public function sendMessage()

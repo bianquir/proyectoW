@@ -16,14 +16,9 @@
         var channel = pusher.subscribe('chat-channel');
         
         channel.bind('chat-event', function(data) {
-            console.log('Data recibida:', data);  // Log para ver si se recibe
-            Livewire.emit('refresh'); // Esto vuelve a cargar los mensajes
-            });             
-    
-        // Revisa si hay errores en la conexión
-        pusher.connection.bind('error', function(err) {
-            console.error('Error de conexión:', err);
-        });
+        console.log('Nuevo mensaje recibido:', data);
+        window.Livewire.dispatch('refreshMessages');
+    });
     </script>
 
        <script src="{{ asset('/js/filament/custom.js') }}"></script>
@@ -148,7 +143,7 @@
         </div>
         
         <!-- Mensajes del Chat -->
-        <div id="chat-messages" class="chat-messages flex-1 overflow-y-auto p-2" wire:scroll="onScroll">
+        <div id="chat-messages" class="chat-messages flex-1 overflow-y-auto p-2">
             @if ($selectedCustomer && $messages->isNotEmpty())
         @php
             $lastDate = null;

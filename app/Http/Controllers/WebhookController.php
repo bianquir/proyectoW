@@ -136,6 +136,8 @@ class WebhookController extends Controller
                     'contact_phone_numbers' => isset($contactReceived['contact_phone_numbers']) ? implode(', ', $contactReceived['contact_phone_numbers']) : '',
                     'timestamp' => $timestamp,
                 ]);
+            
+                broadcast(new \App\Events\ChatMessages($message));
     
                 // Guardar archivos multimedia si los hay
                 if (!empty($mediaFilesData)) {
@@ -168,7 +170,7 @@ class WebhookController extends Controller
                     }
                 }
                 
-    
+                
                 return response()->json(['success' => true], 200);
             } else {
                 return response()->json(['success' => false, 'message' => 'Estructura de datos incorrecta.'], 400);
@@ -179,6 +181,7 @@ class WebhookController extends Controller
             Log::error('Error al procesar el webhook:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
+        
     }
     
     
