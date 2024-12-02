@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WebhookController;
@@ -34,5 +35,7 @@ Route::get('/dashboard', function () {
  });
 Route::get('/webhook', [WebhookController::class, 'verifyWebhook']);
 Route::post('/webhook', [WebhookController::class, 'receiveMessage']);
+Route::get('media/{disk}/{fileName}', [MediaController::class, 'getMediaFile'])->name('media.get');
+
 
 require __DIR__.'/auth.php';

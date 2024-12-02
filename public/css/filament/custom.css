@@ -666,3 +666,15 @@ body {
         color: var(--accent-light);
     }
 }
+
+.sticker-wrapper {
+    margin: 0.25rem 0; /* Reduce el margen entre mensajes */
+}
+
+.sticker {
+    max-width: 80px; /* Ajusta el tamaño máximo del sticker */
+    max-height: 80px; /* Tamaño consistente */
+    border-radius: 8px; /* Opcional: bordes redondeados */
+    background-color: #f9fafb; /* Opcional: fondo gris claro */
+    padding: 4px; /* Opcional: separación con el borde */
+}

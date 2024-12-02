@@ -78,18 +78,30 @@
                    <h3 class="chat-name font-semibold truncate">{{ $customer->name.' '.$customer->lastname }}</h3>
             
                    <!-- Último mensaje y hora -->
-                   @if(isset($customer->lastMessage))
-                       <div class="last-message flex justify-between text-sm text-gray-600 dark:text-gray-300">
-                           <span class="message-text truncate">
-                               {{ $customer->lastMessage->direction === 'outbound' ? 'Tú: ' : '' }}
-                               {{ $customer->lastMessage->message }}
-                           </span>
-                           <span class="message-time">
-                               {{ $this->formatMessageDate($customer->lastMessage->timestamp) }}
-                           </span>
-                       </div>
-                   @endif
-               
+                    @if(isset($customer->lastMessage))
+                        <div class="last-message flex justify-between text-sm text-gray-600 dark:text-gray-300">
+                            <span class="message-text truncate">
+                                <!-- Verifica si el último mensaje tiene un archivo adjunto -->
+                                @if($customer->lastMessage->message_type === 'image')
+                                    Imagen adjunta
+                                @elseif($customer->lastMessage->message_type === 'video')
+                                    Video adjunto
+                                @elseif($customer->lastMessage->message_type === 'audio')
+                                    Audio adjunto
+                                @elseif($customer->lastMessage->message_type === 'document')
+                                    Documento adjunto
+                                @else
+                                    <!-- Si no es un archivo, muestra el mensaje de texto -->
+                                    {{ $customer->lastMessage->direction === 'outbound' ? 'Tú: ' : '' }}
+                                    {{ $customer->lastMessage->message }}
+                                @endif
+                            </span>
+                            <span class="message-time">
+                                {{ $this->formatMessageDate($customer->lastMessage->timestamp) }}
+                            </span>
+                        </div>
+                    @endif
+
                    <!-- Etiquetas como botones -->
                    <div class="mt-1 flex flex-wrap">
                        @foreach($customer->tags as $tag)
@@ -138,33 +150,87 @@
         <!-- Mensajes del Chat -->
         <div id="chat-messages" class="chat-messages flex-1 overflow-y-auto p-2" wire:scroll="onScroll">
             @if ($selectedCustomer && $messages->isNotEmpty())
-                @php
-                    $lastDate = null;
-                @endphp
-                @foreach($messages as $message)
-                @php
-                $messageDate = \Carbon\Carbon::parse($message->created_at)->setTimezone('America/Argentina/Buenos_Aires')->format('H:i');
-                @endphp
+        @php
+            $lastDate = null;
+        @endphp
+        @foreach($messages as $message)
+        @php
+            $messageDate = \Carbon\Carbon::parse($message->created_at)->setTimezone('America/Argentina/Buenos_Aires')->format('Y-m-d'); // Formato para comparar fechas
+            $currentDate = now()->setTimezone('America/Argentina/Buenos_Aires')->format('Y-m-d'); // Fecha actual
+        @endphp
 
-            <!-- Mostrar fecha si el día cambia -->
-            @if ($lastDate !== $messageDate)
-                <div class="date-separator text-center text-gray-500 my-2">
+        <!-- Mostrar fecha si el día cambia -->
+        @if ($lastDate !== $messageDate)
+            <div class="date-separator text-center text-gray-500 my-2">
+                @if ($messageDate == $currentDate)
+                    <span>Hoy</span>
+                @else
                     <span>{{ $this->formatMessageDate($message->timestamp) }}</span>
-                </div>
-                @php
-                    $lastDate = $messageDate;
-                @endphp
-            @endif
-
-            <!-- Mensaje -->
-            <div class="message-wrapper w-full flex mb-2">
-                <div class="message-container {{ $message->direction == 'outbound' ? 'ml-auto' : 'mr-auto' }} max-w-xs">
-                    <div class="message-content p-3 rounded-lg {{ $message->direction == 'outbound' ? 'sent' : 'received' }} shadow-md">
-                        <p class="text-xs">{{ $message->message }}</p>
-                        <span class="text-time">{{ \Carbon\Carbon::parse($message->timestamp)->format('H:i') }}</span>
-                    </div>
-                </div>
+                @endif
             </div>
+            @php
+                $lastDate = $messageDate; // Actualiza la última fecha
+            @endphp
+        @endif
+
+        <!-- Mensaje -->
+        <div class="message-wrapper w-full flex mb-2 {{ $message->direction == 'outbound' ? 'justify-end' : 'justify-start' }}">
+            <div class="message-content p-3 rounded-lg {{ $message->direction == 'outbound' ? 'sent' : 'received' }} shadow-md">
+                @if($message->message_type === 'text')
+                    <p class="text-xs">{{ $message->message }}</p>
+                @elseif($message->message_type === 'image')
+                    @if($message->mediaFiles->isNotEmpty())
+                        <img src="{{ route('media.get', ['disk' => 'image', 'fileName' => $message->mediaFiles->first()->media_url]) }}" 
+                        alt="Imagen" class="max-w-full sm:max-w-xs max-h-48 sm:max-h-64 rounded object-cover">
+                    @endif
+                @elseif($message->message_type === 'video')
+                    @if($message->mediaFiles->isNotEmpty())
+                        <video controls class="max-w-full sm:max-w-xs max-h-48 sm:max-h-64 rounded object-cover">
+                            <source src="{{ route('media.get', ['disk' => 'video', 'fileName' => $message->mediaFiles->first()->media_url]) }}" type="video/mp4">
+                            Tu navegador no soporta videos.
+                        </video>
+                    @endif
+                @elseif($message->message_type === 'document')
+                    @if($message->mediaFiles->isNotEmpty())
+                        <a href="{{ route('media.get', ['disk' => 'document', 'fileName' => $message->mediaFiles->first()->media_url]) }}" 
+                        target="_blank" class="flex items-center text-blue-600 underline hover:text-blue-800">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6 mr-2" viewBox="0 0 24 24">
+                                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                                <path d="M13 2v7h7"></path>
+                            </svg>
+                            Descargar documento
+                        </a>
+                    @endif
+                @elseif($message->message_type === 'contacts')
+                    @if($message->message_type === 'contacts')
+                        <div class="contact-info p-3 bg-gray-100 rounded">
+                            <p class="font-bold text-gray-800">Nombre: {{ $message->contact_name }}</p>
+                            <p class="text-gray-600">Teléfono: 
+                                <a href="https://wa.me/{{ $message->contact_phone_numbers }}" 
+                                target="_blank" class="text-blue-600 underline hover:text-blue-800">
+                                {{ $message->contact_phone_numbers }}
+                                </a>
+                            </p>
+                        </div>
+                    @endif
+                @elseif($message->message_type === 'sticker')
+                    @if($message->mediaFiles->isNotEmpty())
+                    <div class="sticker-wrapper flex justify-center">
+                        <img src="{{ route('media.get', ['disk' => 'sticker', 'fileName' => $message->mediaFiles->first()->media_url]) }}" 
+                            alt="Sticker" class="sticker max-w-[100px] max-h-[100px] object-contain">
+                    </div>
+                    @endif
+                @elseif($message->message_type === 'audio')
+                    @if($message->mediaFiles->isNotEmpty())
+                    <audio controls>
+                        <source src="{{ route('media.get', ['disk' => 'audio', 'fileName' => $message->mediaFiles->first()->media_url]) }}" type="audio/mpeg">
+                        Tu navegador no soporta el elemento de audio.
+                    </audio>
+                    @endif
+                @endif
+        <span class="text-time">{{ \Carbon\Carbon::parse($message->timestamp)->format('H:i') }}</span>
+    </div>
+</div>
                 @endforeach
                 @elseif ($selectedCustomer)
                 <p class="text-gray-500">No hay mensajes para este cliente.</p>
@@ -178,16 +244,22 @@
             @endif
         </div>
         
-        <!-- Input del Mensaje -->
-        @if ($selectedCustomer)
-            <div class="chat-input flex items-center p-3 border-t border-gray-300 bg-gray-100">
-                <input wire:model="newMessage" type="text" placeholder="Escribe un mensaje..."
-                    class="flex-1 p-2 text-sm border rounded-full outline-none focus:ring focus:ring-blue-300">
-                    <button wire:click="sendMessage({{ $selectedCustomer }})">
-                        Enviar
-                    </button>
-            </div>
-        @endif
+<!-- Input del Mensaje -->
+@if ($selectedCustomer)
+    <div class="chat-input flex items-center p-3 border-t border-gray-300 bg-gray-100">
+        <input 
+            wire:model="newMessage" 
+            wire:keydown.enter="sendMessage({{ $selectedCustomer }})" 
+            type="text" 
+            placeholder="Escribe un mensaje..." 
+            class="flex-1 p-2 text-sm border rounded-full outline-none focus:ring focus:ring-blue-300">
+        <button wire:click="sendMessage({{ $selectedCustomer }})" class="ml-2 px-3 py-1 bg-blue-500 text-white rounded">
+            Enviar
+        </button>
+    </div>
+@endif
+
+
     </div>
 
     <!-- MODALES-->
